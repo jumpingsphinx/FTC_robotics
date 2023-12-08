@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class V3Farquaad extends LinearOpMode {
     public static double DRIVER_SPEED_SCALAR = 0.85;
     public static double DRIVER_SPRINT_MODE_SCALAR = 0.95;
-    public static double DRIVER_ROTATION_SCALAR = 0.5;
+    public static double DRIVER_ROTATION_SCALAR = 0.7;
     public static double DRIVER_SLOW_MODE_SCALAR = 0.50;
     public static double SENSITIVITY_THRESHOLD = 0.20;
     public static double LIFT_SCALAR = 0.85;
@@ -30,10 +30,10 @@ public class V3Farquaad extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        fl = hardwareMap.get(DcMotor.class, "fl");
-        fr = hardwareMap.get(DcMotor.class, "fr");
-        bl = hardwareMap.get(DcMotor.class, "bl");
-        br = hardwareMap.get(DcMotor.class, "br");
+        fl = hardwareMap.get(DcMotor.class, "leftFront");
+        fr = hardwareMap.get(DcMotor.class, "rightFront");
+        bl = hardwareMap.get(DcMotor.class, "leftBack");
+        br = hardwareMap.get(DcMotor.class, "rightBack");
         lift = hardwareMap.get(DcMotor.class, "lift");
 
         wristleft = hardwareMap.get(Servo.class, "wristleft");
@@ -53,6 +53,12 @@ public class V3Farquaad extends LinearOpMode {
         br.setDirection(DcMotorSimple.Direction.FORWARD);
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
 
+        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         TeleOpMecanumDrive myDrive = new TeleOpMecanumDrive(fl, fr, bl, br);
         telemetry.addData("Status: ", "Waiting for Start");
         telemetry.update();
@@ -65,7 +71,7 @@ public class V3Farquaad extends LinearOpMode {
             telemetry.addData("Status: ", "Running!");
             double x = gamepad1.left_stick_x;
             double y = -gamepad1.left_stick_y;
-            yaw = gamepad1.left_trigger - gamepad1.right_trigger;
+            yaw = gamepad1.right_stick_x;
 
             if (Math.abs(yaw) < SENSITIVITY_THRESHOLD) {
                 yaw = 0;
