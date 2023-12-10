@@ -7,7 +7,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-public class BlueVisionPipeline extends OpenCvPipeline {
+public class RedVisionPipeline extends OpenCvPipeline {
     Mat mat = new Mat();
     private int position = 0;
 
@@ -19,10 +19,22 @@ public class BlueVisionPipeline extends OpenCvPipeline {
         // Convert to HSV
         Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGB2HSV);
 
-        // Define blue color range and create a mask
-        Scalar lowerBlue = new Scalar(101, 60, 12.9);
-        Scalar upperBlue = new Scalar(230, 77.5, 78.4);
-        Core.inRange(mat, lowerBlue, upperBlue, mat);
+        // Define red color range and create a mask
+        Scalar lowerBlue = new Scalar(0, 75, 50);
+        Scalar upperBlue = new Scalar(9, 90, 70);
+        Mat mask1 = new Mat();
+        Core.inRange(mat, lowerBlue, upperBlue, mask1);
+
+        // Define second red color range and create a mask
+        Scalar lowerRed2 = new Scalar(160, 75, 50); // Adjust these values
+        Scalar upperRed2 = new Scalar(180, 90, 85); // Adjust these values
+        Mat mask2 = new Mat();
+        Core.inRange(mat, lowerRed2, upperRed2, mask2);
+
+        // Combine both masks
+        Core.add(mask1, mask2, mat);
+        mask1.release();
+        mask2.release();
 
         int widthThird = input.width() / 3;
         int[] blueCounts = new int[3];
