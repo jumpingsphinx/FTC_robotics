@@ -70,7 +70,8 @@ public class BlueSidePixelAuto extends LinearOpMode {
 
             @Override
             public void onError(int errorCode) {
-                // Error handling
+                telemetry.addData("Error", "failed to open camera");
+                telemetry.update();
             }
         });
 
