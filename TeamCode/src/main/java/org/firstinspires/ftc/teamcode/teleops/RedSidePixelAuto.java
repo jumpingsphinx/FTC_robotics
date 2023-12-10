@@ -14,8 +14,8 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
-@Autonomous(name = "BLUE_AUTO_PIXEL", group = "Autonomous")
-public class BlueSidePixelAuto extends LinearOpMode {
+@Autonomous(name = "RED_AUTO_PIXEL", group = "Autonomous")
+public class RedSidePixelAuto extends LinearOpMode {
     boolean finished = false;
 
     @Override
@@ -34,11 +34,11 @@ public class BlueSidePixelAuto extends LinearOpMode {
         Action TrajectoryAction1;
         if (vision_result == 1){
             TrajectoryAction1 = drive.actionBuilder(drive.pose)
-                .lineToX(5)
-                .turn(Math.toRadians(90))
-                .lineToX(23)
-                .lineToY(-5)
-                .build();}
+                    .lineToX(5)
+                    .turn(Math.toRadians(-90))
+                    .lineToX(22)
+                    .lineToY(1)
+                    .build();}
         else if (vision_result == 2){
             TrajectoryAction1 = drive.actionBuilder(drive.pose)
                     .lineToX(26)
@@ -46,9 +46,10 @@ public class BlueSidePixelAuto extends LinearOpMode {
                     .build();}
         else {
             TrajectoryAction1 = drive.actionBuilder(drive.pose)
-                    .lineToX(1)
-                    .lineToY(-12)
-                    .lineToX(8)
+                    .lineToX(2)
+                    .turn(Math.toRadians(90))
+                    .lineToX(25)
+                    .lineToY(4)
                     .build();}
         //robot moves on init!!
         claw.setPosition(0.55);
