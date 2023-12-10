@@ -101,7 +101,7 @@ public class V3Farquaad extends LinearOpMode {
             }
             //close claw
             else if (gamepad2.b){
-                claw.setPosition(0.53);
+                claw.setPosition(0.55);
             }
             //wrist ground
             if (gamepad2.x){
