@@ -10,8 +10,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.vision.RedVisionPipeline;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.teamcode.vision.BlueVisionPipeline;
 
 @Config
 @Autonomous(name = "BLUE_AUTO_PIXEL", group = "Autonomous")
@@ -28,44 +34,75 @@ public class BlueSidePixelAuto extends LinearOpMode {
         DcMotor lift = hardwareMap.get(DcMotor.class,  "lift");
 
 
-        //vision here
-        double vision_result = 1; // or 2 or 3
+        //vision here// or 2 or 3
 
         Action TrajectoryAction1;
-        if (vision_result == 1){
-            TrajectoryAction1 = drive.actionBuilder(drive.pose)
+        Action TrajectoryAction2;
+        Action TrajectoryAction3;
+        TrajectoryAction1 = drive.actionBuilder(drive.pose)
                 .lineToX(5)
                 .turn(Math.toRadians(90))
                 .lineToX(23)
                 .lineToY(-5)
-                .build();}
-        else if (vision_result == 2){
-            TrajectoryAction1 = drive.actionBuilder(drive.pose)
+                .build();
+        TrajectoryAction2 = drive.actionBuilder(drive.pose)
                     .lineToX(26)
                     .lineToY(4)
-                    .build();}
-        else {
-            TrajectoryAction1 = drive.actionBuilder(drive.pose)
+                    .build();
+        TrajectoryAction3 = drive.actionBuilder(drive.pose)
                     .lineToX(1)
                     .lineToY(-12)
                     .lineToX(8)
-                    .build();}
+                    .build();
         //robot moves on init!!
         claw.setPosition(0.55);
 
-        while(!isStopRequested() && !opModeIsActive()) {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        OpenCvCamera webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        BlueVisionPipeline pipeline = new BlueVisionPipeline();
+        webcam.setPipeline(pipeline);
 
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                // Error handling
+            }
+        });
+
+        while(!isStopRequested() && !opModeIsActive()) {
+            int position = pipeline.outputPosition();
+            telemetry.addData("Position during Init", position);
+            telemetry.update();
         }
 
+        int startPosition = pipeline.outputPosition();
+        telemetry.addData("Starting Position", startPosition);
+        telemetry.update();
         waitForStart();
 
         if (isStopRequested()) return;
 
+        Action TrajectoryActionChosen;
+        if (startPosition == 1){
+            TrajectoryActionChosen = TrajectoryAction1;
+        }
+        else if (startPosition == 2){
+            TrajectoryActionChosen = TrajectoryAction2;
+        }
+        else {
+            TrajectoryActionChosen = TrajectoryAction3;
+        }
+
         Actions.runBlocking(
                 new SequentialAction(
-                        TrajectoryAction1, // Example of a drive action
+                        TrajectoryActionChosen, // Example of a drive action
                         (telemetryPacket) -> {
-                            telemetry.addLine("Action!");
+                            telemetry.addLine("Ran to position!");
                             return false;
                         },
                         (telemetryPacket) -> { // Run some action
