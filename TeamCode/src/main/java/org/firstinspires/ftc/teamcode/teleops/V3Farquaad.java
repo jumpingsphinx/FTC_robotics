@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "V3Farquaad", group = "TeleOp")
 public class V3Farquaad extends LinearOpMode {
+    // DRIVE CONSTANTS
     public static final double DRIVER_SPEED_SCALAR = 0.85;
     public static final double DRIVER_SPRINT_MODE_SCALAR = 0.95;
     public static final double DRIVER_ROTATION_SCALAR = 0.7;
@@ -13,6 +14,18 @@ public class V3Farquaad extends LinearOpMode {
     public static final double SENSITIVITY_THRESHOLD = 0.20;
     public static final double LIFT_SCALAR = 0.85;
     public static final double PULL_SCALAR = 0.95;
+    public static final double COURSE_CORRECT = 1.04;
+
+    //GUNNER CONSTANTS
+    public static final double HOPPER_OPEN = 0.05;
+    public static final double HOPPER_CLOSED = 0.38;
+    public static final double CLAW_CLOSED = 0.66;
+    public static final double CLAW_OPEN_PICKUP = 0.52;
+    public static final double CLAW_OPEN_DROPOFF = 0.60;
+    public static final double WRIST_UP = 0.13;
+    public static final double WRIST_DOWN = 0.825;
+    public static final double LAUNCHER_HOLD = 0.83;
+    public static final double LAUNCHER_RELEASE = 0.68;
 
     private Servo wristleft;
     private Servo wristright;
@@ -47,9 +60,8 @@ public class V3Farquaad extends LinearOpMode {
         launcher = hardwareMap.get(Servo.class, "launcher");
 
         //tighten the launcher
-        launcher.setPosition(0.6);
-        hopper.setPosition(0.38);
-        waitForStart();
+        launcher.setPosition(LAUNCHER_HOLD);
+        hopper.setPosition(HOPPER_CLOSED);
 
         fl.setDirection(DcMotorSimple.Direction.REVERSE);
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -69,15 +81,13 @@ public class V3Farquaad extends LinearOpMode {
         pullupright.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         TeleOpMecanumDrive myDrive = new TeleOpMecanumDrive(fl, fr, bl, br);
-        telemetry.addData("Status: ", "Waiting for Start");
-        telemetry.update();
         double yaw = 0;
         intakeTimer = System.currentTimeMillis();
 
+        waitForStart();
         while (opModeIsActive()) {
             double currentTime = System.currentTimeMillis();
             double elapsedIntakeTimer = currentTime - intakeTimer;
-            telemetry.addData("Status: ", "Running!");
             double x = gamepad1.left_stick_x;
             double y = -gamepad1.left_stick_y;
             yaw = gamepad1.right_stick_x;
@@ -101,65 +111,53 @@ public class V3Farquaad extends LinearOpMode {
                 scalar = DRIVER_SPRINT_MODE_SCALAR;
             }
 
-            myDrive.drive(x, y, yaw * DRIVER_ROTATION_SCALAR, scalar);
+            telemetry.addData("Wheel powers, fl, fr, bl, br: ", myDrive.drive(x, y, yaw * DRIVER_ROTATION_SCALAR, scalar, COURSE_CORRECT));
+            telemetry.update();
 
             //gunner controls
-            //open claw
-            if (gamepad2.a){
-                claw.setPosition(0.32);
+            if (gamepad2.x){
+                if (wristleft.getPosition() > WRIST_DOWN - 0.035 && wristleft.getPosition() < WRIST_DOWN + 0.035){
+                claw.setPosition(CLAW_OPEN_PICKUP);
+                }
+                else if (wristleft.getPosition() > WRIST_UP - 0.035 && wristleft.getPosition() < WRIST_UP + 0.035){
+                    claw.setPosition(CLAW_OPEN_DROPOFF);
+                }
+                else {
+                    claw.setPosition(CLAW_OPEN_PICKUP);
+                }
             }
-            //close claw
             else if (gamepad2.b){
-                claw.setPosition(0.55);
+                claw.setPosition(CLAW_CLOSED);
             }
             //wrist ground
-            if (gamepad2.x){
-                wristleft.setPosition(0.03);
-                wristright.setPosition(0.97);
+            if (gamepad2.a){
+                wristleft.setPosition(WRIST_DOWN);
+                wristright.setPosition(1-WRIST_DOWN);
             }
             //wrist flip
             else if (gamepad2.y){
-                wristleft.setPosition(0.68);
-                wristright.setPosition(.32);
+                wristleft.setPosition(WRIST_UP);
+                wristright.setPosition(1-WRIST_UP);
             }
-            //pickup + drop into hopper
-            if (gamepad2.dpad_up){
-                //close claw
-                if (elapsedIntakeTimer < 500) {
-                    claw.setPosition(0.49);
-                }
-                //flip
-                else if (elapsedIntakeTimer < 800) {
-                    wristleft.setPosition(0.68);
-                    wristright.setPosition(.32);
-                }
-                //open claw
-                else if (elapsedIntakeTimer < 1100) {
-                    claw.setPosition(0.32);
-                }
-                //reset
-                if (elapsedIntakeTimer >= 1100) {
-                    intakeTimer = currentTime;
-
-                }
-            }
-
-            //close hopper
             if (gamepad2.left_bumper){
-                hopper.setPosition(0.38);
+                hopper.setPosition(HOPPER_CLOSED);
             }
-            //open hopper
             else if (gamepad2.right_bumper){
-                hopper.setPosition(0.05);
+                hopper.setPosition(HOPPER_OPEN);
             }
-
+            if (gamepad2.left_trigger > 0.5){
+                launcher.setPosition(LAUNCHER_RELEASE);
+            }
+            // lift controls
             if (Math.abs(gamepad2.right_stick_y) > SENSITIVITY_THRESHOLD){
                 double power = -gamepad2.right_stick_y;
-                lift.setPower(power * LIFT_SCALAR);
+                lift.setPower(power *
+                        LIFT_SCALAR);
             }
             else{
                 lift.setPower(0);
             }
+            // pull up controls
             if (Math.abs(gamepad2.left_stick_y) > SENSITIVITY_THRESHOLD){
                 double power = -gamepad2.left_stick_y;
                 pullupright.setPower(power * PULL_SCALAR);
@@ -172,5 +170,5 @@ public class V3Farquaad extends LinearOpMode {
         }
 
     }
-
 }
+

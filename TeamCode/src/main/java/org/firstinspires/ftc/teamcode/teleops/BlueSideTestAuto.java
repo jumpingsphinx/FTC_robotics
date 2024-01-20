@@ -42,7 +42,7 @@ public class BlueSideTestAuto extends LinearOpMode {
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPose", pos);
-                if (pos < 3000.0) {
+                if (pos < 400.0) {
                     return true;
                 } else {
                     lift.setPower(0);
@@ -95,7 +95,7 @@ public class BlueSideTestAuto extends LinearOpMode {
         public class OpenClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                claw.setPosition(1.0);
+                claw.setPosition(0.7);
                 return false;
             }}
         public Action openClaw(){
@@ -122,21 +122,21 @@ public class BlueSideTestAuto extends LinearOpMode {
                 .waitSeconds(2)
                 .setTangent(Math.toRadians(90))
                 .lineToY(48)
-                .setTangent(Math.toRadians(0))
-                .lineToX(32)
-                .strafeTo(new Vector2d(44.5, 30))
-                .turn(Math.toRadians(180))
-                .lineToX(47.5)
-                .waitSeconds(3)
+//                .setTangent(Math.toRadians(0))
+//                .lineToX(32)
+//                .strafeTo(new Vector2d(44.5, 30))
+//                .turn(Math.toRadians(180))
+//                .lineToX(47.5)
+//                .waitSeconds(3)
                 .build();
         TrajectoryAction2 = drive.actionBuilder(drive.pose)
                 .lineToY(37)
                 .setTangent(Math.toRadians(0))
                 .lineToX(18)
                 .waitSeconds(3)
-                .setTangent(Math.toRadians(0))
-                .lineToXSplineHeading(46,Math.toRadians(180))
-                .waitSeconds(3)
+//                .setTangent(Math.toRadians(0))
+//                .lineToXSplineHeading(46,Math.toRadians(180))
+//                .waitSeconds(3)
                 .build();
         TrajectoryAction3 = drive.actionBuilder(drive.pose)
                 .lineToYSplineHeading(33, Math.toRadians(180))

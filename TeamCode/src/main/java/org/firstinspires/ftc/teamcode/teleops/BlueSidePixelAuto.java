@@ -52,7 +52,7 @@ public class BlueSidePixelAuto extends LinearOpMode {
                 .lineToX(47.5)
                 // drop pixel here
                 .waitSeconds(3)
-                .build());
+                .build();
         TrajectoryAction2 = drive.actionBuilder(drive.pose)
                 .lineToY(37)
                 .setTangent(Math.toRadians(0))
@@ -63,7 +63,7 @@ public class BlueSidePixelAuto extends LinearOpMode {
                 .lineToXSplineHeading(46,Math.toRadians(180))
                 // DROP OTHER PIXEL
                 .waitSeconds(3)
-                .build());
+                .build();
         TrajectoryAction3 = drive.actionBuilder(drive.pose)
                 .lineToYSplineHeading(33, Math.toRadians(180))
                 // drop pixel here

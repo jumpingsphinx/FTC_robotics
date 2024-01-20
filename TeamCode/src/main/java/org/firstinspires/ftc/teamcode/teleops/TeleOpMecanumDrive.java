@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.teleops;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import java.util.ArrayList;
+
 public class TeleOpMecanumDrive{
     private DcMotor frontLeft, frontRight, backLeft, backRight;
 
@@ -11,7 +13,7 @@ public class TeleOpMecanumDrive{
         this.backRight = backRight;
     }
 
-    public void drive(double x, double y, double yaw, double scalar) {
+    public ArrayList drive(double x, double y, double yaw, double scalar, double correction) {
         double fl = x + y + yaw;
         double fr = -x + y - yaw;
         double bl = -x + y + yaw;
@@ -33,11 +35,23 @@ public class TeleOpMecanumDrive{
             bl = bl * scalar;
             br = br * scalar;
         }
+        if (correction != 1.0){
+            fl = fl * correction;
+        }
 
         // Set the power for the motors
         frontLeft.setPower(fl);
         frontRight.setPower(fr);
         backLeft.setPower(bl);
         backRight.setPower(br);
+
+        ArrayList telemetrystuff = new ArrayList();
+
+        telemetrystuff.add(frontLeft.getPower());
+        telemetrystuff.add(frontRight.getPower());
+        telemetrystuff.add(backLeft.getPower());
+        telemetrystuff.add(backRight.getPower());
+
+        return telemetrystuff;
     }
 }
