@@ -40,20 +40,38 @@ public class BlueSidePixelAuto extends LinearOpMode {
         Action TrajectoryAction2;
         Action TrajectoryAction3;
         TrajectoryAction1 = drive.actionBuilder(drive.pose)
-                .lineToX(5)
-                .turn(Math.toRadians(90))
-                .lineToX(23)
-                .lineToY(-5)
-                .build();
+                .lineToYSplineHeading(33, Math.toRadians(0))
+                // drop pixel here
+                .waitSeconds(2)
+                .setTangent(Math.toRadians(90))
+                .lineToY(48)
+                .setTangent(Math.toRadians(0))
+                .lineToX(32)
+                .strafeTo(new Vector2d(44.5, 30))
+                .turn(Math.toRadians(180))
+                .lineToX(47.5)
+                // drop pixel here
+                .waitSeconds(3)
+                .build());
         TrajectoryAction2 = drive.actionBuilder(drive.pose)
-                    .lineToX(26)
-                    .lineToY(4)
-                    .build();
+                .lineToY(37)
+                .setTangent(Math.toRadians(0))
+                .lineToX(18)
+                .waitSeconds(3)
+                // DROP PIXEL
+                .setTangent(Math.toRadians(0))
+                .lineToXSplineHeading(46,Math.toRadians(180))
+                // DROP OTHER PIXEL
+                .waitSeconds(3)
+                .build());
         TrajectoryAction3 = drive.actionBuilder(drive.pose)
-                    .lineToX(1)
-                    .lineToY(-12)
-                    .lineToX(8)
-                    .build();
+                .lineToYSplineHeading(33, Math.toRadians(180))
+                // drop pixel here
+                .waitSeconds(2)
+                .strafeTo(new Vector2d(46, 30))
+                // drop pixel here
+                .waitSeconds(3)
+                .build();
         //robot moves on init!!
         claw.setPosition(0.55);
 

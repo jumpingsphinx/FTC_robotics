@@ -6,12 +6,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "V3Farquaad", group = "TeleOp")
 public class V3Farquaad extends LinearOpMode {
-    public static double DRIVER_SPEED_SCALAR = 0.85;
-    public static double DRIVER_SPRINT_MODE_SCALAR = 0.95;
-    public static double DRIVER_ROTATION_SCALAR = 0.7;
-    public static double DRIVER_SLOW_MODE_SCALAR = 0.50;
-    public static double SENSITIVITY_THRESHOLD = 0.20;
-    public static double LIFT_SCALAR = 0.85;
+    public static final double DRIVER_SPEED_SCALAR = 0.85;
+    public static final double DRIVER_SPRINT_MODE_SCALAR = 0.95;
+    public static final double DRIVER_ROTATION_SCALAR = 0.7;
+    public static final double DRIVER_SLOW_MODE_SCALAR = 0.50;
+    public static final double SENSITIVITY_THRESHOLD = 0.20;
+    public static final double LIFT_SCALAR = 0.85;
+    public static final double PULL_SCALAR = 0.95;
 
     private Servo wristleft;
     private Servo wristright;
@@ -25,7 +26,8 @@ public class V3Farquaad extends LinearOpMode {
     private DcMotor bl;
     private DcMotor br;
     private DcMotor lift;
-
+    private DcMotor pullupleft;
+    private DcMotor pullupright;
     private double intakeTimer;
 
     @Override
@@ -35,6 +37,8 @@ public class V3Farquaad extends LinearOpMode {
         bl = hardwareMap.get(DcMotor.class, "leftBack");
         br = hardwareMap.get(DcMotor.class, "rightBack");
         lift = hardwareMap.get(DcMotor.class, "lift");
+        pullupleft = hardwareMap.get(DcMotor.class, "pullupleft");
+        pullupright = hardwareMap.get(DcMotor.class, "pullupright");
 
         wristleft = hardwareMap.get(Servo.class, "wristleft");
         wristright = hardwareMap.get(Servo.class, "wristright");
@@ -58,6 +62,11 @@ public class V3Farquaad extends LinearOpMode {
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        pullupleft.setDirection(DcMotor.Direction.FORWARD);
+        pullupright.setDirection(DcMotorSimple.Direction.REVERSE);
+        pullupleft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        pullupright.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         TeleOpMecanumDrive myDrive = new TeleOpMecanumDrive(fl, fr, bl, br);
         telemetry.addData("Status: ", "Waiting for Start");
@@ -150,6 +159,15 @@ public class V3Farquaad extends LinearOpMode {
             }
             else{
                 lift.setPower(0);
+            }
+            if (Math.abs(gamepad2.left_stick_y) > SENSITIVITY_THRESHOLD){
+                double power = -gamepad2.left_stick_y;
+                pullupright.setPower(power * PULL_SCALAR);
+                pullupleft.setPower(power * PULL_SCALAR);
+            }
+            else{
+                pullupright.setPower(0);
+                pullupleft.setPower(0);
             }
         }
 

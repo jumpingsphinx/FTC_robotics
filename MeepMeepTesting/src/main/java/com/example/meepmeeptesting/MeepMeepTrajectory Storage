@@ -1,30 +1,75 @@
-#Red Near, 1 position path
-#drive.trajectorySequenceBuilder(new Pose2d(12, -61, Math.toRadians(90)))
-                                 .forward(5)
-                                 .turn(Math.toRadians(90))
-                                 .strafeRight(22)
-                                 .back(1)
-                                 .back(30)
-                                 .strafeRight(3)
-                                 .back(3)
-                                 .build()
-#Red Near, 2 position path
-#drive.trajectorySequenceBuilder(new Pose2d(12, -61, Math.toRadians(90)))
-                                .forward(27)
-                                .back(5)
-                                .turn(Math.toRadians(90))
-                                .back(1)
-                                .back(30)
-                                .strafeRight(3)
-                                .back(3)
-                                .build()
-#Red Near, 3 position path
-#drive.trajectorySequenceBuilder(new Pose2d(12, -61, Math.toRadians(90)))
-                                .forward(5)
-                                .strafeRight(23)
-                                .turn(Math.toRadians(90))
-                                .strafeRight(25)
-                                .back(2)
-                                .strafeLeft(9)
-                                .back(11)
-                                .build()
+// Right reverse for going up
+
+Default configs hold for all above.
+1. Red near board, CENTER POSITION: 
+	- myFirstBot.runAction(myFirstBot.getDrive().actionBuilder(new Pose2d(11.8, -61.7,  Math.toRadians(90)))
+                .lineToY(-37)
+                .setTangent(Math.toRadians(0))
+                .lineToX(18)
+                .waitSeconds(3)
+                // DROP PIXEL
+                .setTangent(Math.toRadians(0))
+                .lineToXSplineHeading(46,Math.toRadians(180))
+                // DROP OTHER PIXEL
+                .waitSeconds(3)
+                .build());
+2. Red near board, LEFT POSITION:
+	- myFirstBot.runAction(myFirstBot.getDrive().actionBuilder(new Pose2d(11.8, -61.7,  Math.toRadians(90)))
+                .lineToYSplineHeading(-33, Math.toRadians(180))
+                // drop pixel here
+                .waitSeconds(2)
+                .strafeTo(new Vector2d(46, -30))
+                // drop pixel here
+                .waitSeconds(3)
+                .build());
+3. Red near board, RIGHT POSITION:
+	- myFirstBot.runAction(myFirstBot.getDrive().actionBuilder(new Pose2d(11.8, -61.7,  Math.toRadians(90)))
+                .lineToYSplineHeading(-33, Math.toRadians(0))
+                // drop pixel here
+                .waitSeconds(2)
+                .setTangent(Math.toRadians(90))
+                .lineToY(-48)
+                .setTangent(Math.toRadians(0))
+                .lineToX(32)
+                .strafeTo(new Vector2d(44.5, -30))
+                .turnTo(Math.toRadians(180))
+                .lineToX(47.5)
+                // drop pixel here
+                .waitSeconds(3)
+                .build());
+4. Blue near board, LEFT POSITION
+- myFirstBot.runAction(myFirstBot.getDrive().actionBuilder(new Pose2d(11.8, 61.7, Math.toRadians(90)))  
+.lineToYSplineHeading(33, Math.toRadians(0))  
+// drop pixel here  
+.waitSeconds(2)  
+.setTangent(Math.toRadians(90))  
+.lineToY(48)  
+.setTangent(Math.toRadians(0))  
+.lineToX(32)  
+.strafeTo(new Vector2d(44.5, 30))  
+.turn(Math.toRadians(180))  
+.lineToX(47.5)  
+// drop pixel here  
+.waitSeconds(3)  
+.build());
+5. Blue near Board, CENTER POSITION
+- myFirstBot.runAction(myFirstBot.getDrive().actionBuilder(new Pose2d(11.8, 61.7,  Math.toRadians(-90)))
+                .lineToY(37)
+                .setTangent(Math.toRadians(0))
+                .lineToX(18)
+                .waitSeconds(3)
+                // DROP PIXEL
+                .setTangent(Math.toRadians(0))
+                .lineToXSplineHeading(46,Math.toRadians(180))
+                // DROP OTHER PIXEL
+                .waitSeconds(3)
+                .build());
+6. Blue near Board, RIGHT POSITION
+- myFirstBot.runAction(myFirstBot.getDrive().actionBuilder(new Pose2d(11.8, 61.7,  Math.toRadians(-90)))
+                .lineToYSplineHeading(33, Math.toRadians(180))
+                // drop pixel here
+                .waitSeconds(2)
+                .strafeTo(new Vector2d(46, 30))
+                // drop pixel here
+                .waitSeconds(3)
+                .build());
