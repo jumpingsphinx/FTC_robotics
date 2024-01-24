@@ -158,7 +158,7 @@ public class BlueEncoderAuto extends LinearOpMode {
             sleep(30);
             telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(132,806,-763,-1491));
             sleep(30);
-            // CLAW DOWN AND DROP
+            telemetry.addLine(yellowDropSequence());
         }
         else if (pos == 2){
             telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-203,221,207,-201));
@@ -170,7 +170,7 @@ public class BlueEncoderAuto extends LinearOpMode {
             sleep(30);
             telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(178,610,-913,-1400));
             sleep(30);
-            // CLAW DOWN AND DROP
+            telemetry.addLine(yellowDropSequence());
         }
         // handle pos = 1
         else {
@@ -188,12 +188,10 @@ public class BlueEncoderAuto extends LinearOpMode {
             sleep(30);
             telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-453,887,-664,-2049));
             sleep(30);
-            // CLAW DOWN AND DROP
+            telemetry.addLine(yellowDropSequence());
         }
 
-
-
-    }   // end runOpMode()
+    }
 
     /**
      * Initialize the TensorFlow Object Detection processor.
@@ -206,6 +204,21 @@ public class BlueEncoderAuto extends LinearOpMode {
         wristright.setPosition(1 - WRIST_UP);
         claw.setPosition(CLAW_CLOSED);
         return "Placed Purple!";
+    }
+    private String yellowDropSequence() {
+        hopper.setPosition(HOPPER_CLOSED);
+        wristleft.setPosition(WRIST_DOWN);
+        wristright.setPosition(1 - WRIST_DOWN);
+        lift.setPower(0.6);
+        sleep(1000);
+        lift.setPower(0);
+        hopper.setPosition(HOPPER_OPEN);
+        sleep(500);
+        hopper.setPosition(HOPPER_CLOSED);
+        lift.setPower(-0.6);
+        sleep(1000);
+        lift.setPower(0);
+        return "Placed Yellow!";
     }
     private void initTfod() {
 
