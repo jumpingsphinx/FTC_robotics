@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.vision.ConceptTensorFlowObjectDetection;
@@ -16,7 +15,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
-
 import java.util.List;
 
 
@@ -24,25 +22,8 @@ import java.util.List;
 @Autonomous(name = "BLUE_AUTO_PIXEL_ENCODER", group = "Autonomous")
 public class BlueEncoderAuto extends LinearOpMode {
 
-    public static final double DRIVER_SPEED_SCALAR = 0.85;
-    public static final double DRIVER_SPRINT_MODE_SCALAR = 0.95;
-    public static final double DRIVER_ROTATION_SCALAR = 0.7;
-    public static final double DRIVER_SLOW_MODE_SCALAR = 0.50;
-    public static final double SENSITIVITY_THRESHOLD = 0.20;
-    public static final double LIFT_SCALAR = 0.85;
-    public static final double PULL_SCALAR = 0.95;
-    public static final double COURSE_CORRECT = 1.04;
-
-    //GUNNER CONSTANTS
-    public static final double HOPPER_OPEN = 0.05;
     public static final double HOPPER_CLOSED = 0.38;
-    public static final double CLAW_CLOSED = 0.66;
-    public static final double CLAW_OPEN_PICKUP = 0.52;
-    public static final double CLAW_OPEN_DROPOFF = 0.60;
-    public static final double WRIST_UP = 0.13;
-    public static final double WRIST_DOWN = 0.825;
     public static final double LAUNCHER_HOLD = 0.83;
-    public static final double LAUNCHER_RELEASE = 0.68;
 
     private Servo wristleft;
     private Servo wristright;
@@ -91,21 +72,6 @@ public class BlueEncoderAuto extends LinearOpMode {
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
 
-        if (opModeIsActive()) {
-            while (opModeIsActive()) {
-
-                int position = telemetryTfod();
-                telemetry.addData("position: ", position);
-                // Push telemetry to the Driver Station.
-                telemetry.update();
-
-                // Share the CPU.
-                sleep(20);
-            }
-        }
-
-        waitForStart();
-
         // Save more CPU resources when camera is no longer needed.
         visionPortal.close();
         fl = hardwareMap.get(DcMotor.class, "leftFront");
@@ -151,16 +117,63 @@ public class BlueEncoderAuto extends LinearOpMode {
         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Wrapper wrapMotors = new Wrapper (fl,fr,bl,br);
+        int pos = 3;
+        while (opModeIsActive()) {
+            pos = telemetryTfod();
+            telemetry.addData("position: ", pos);
+            telemetry.update();
+            sleep(20);
+        }
 
-        fl.setTargetPosition(100);
-        bl.setTargetPosition(100);
-        fr.setTargetPosition(100);
-        br.setTargetPosition(100);
+        waitForStart();
+        if (pos == 3){
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-175,182,160,-131));
+            sleep(30);
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(711,1037,1064,754));
+            sleep(30);
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(1485,1789,227,-122));
+            sleep(30);
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(1543,1837,268,-90));
+            sleep(30);
+            // DROP POINT
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(338,631,-923,-1292));
+            sleep(30);
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(132,806,-763,-1491));
+            sleep(30);
+            // CLAW DOWN AND DROP
+        }
+        else if (pos == 2){
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-203,221,207,-201));
+            sleep(30);
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(549,967,1019,589));
+            sleep(30);
+            // DROP POINT
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(1308,1730,202,-291));
+            sleep(30);
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(178,610,-913,-1400));
+            sleep(30);
+            // CLAW DOWN AND DROP
+        }
+        // handle pos = 1
+        else {
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-445,405,444,-402));
+            sleep(30);
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(3,827,875,42));
+            sleep(30);
+            // DROP POINT
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(698,1492,7,-842));
+            sleep(30);
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(42,825,-688,-150));
+            sleep(30);
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-221,1141,-438,-1829));
+            sleep(30);
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-453,887,-664,-2049));
+            sleep(30);
+            // CLAW DOWN AND DROP
+        }
 
-        telemetry.addData("fl", fl.getCurrentPosition());
-        telemetry.addData("bl", bl.getCurrentPosition());
-        telemetry.addData("fr", fr.getCurrentPosition());
-        telemetry.addData("br", br.getCurrentPosition());
+
 
     }   // end runOpMode()
 
