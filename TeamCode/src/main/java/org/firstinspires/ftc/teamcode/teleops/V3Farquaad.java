@@ -75,6 +75,17 @@ public class V3Farquaad extends LinearOpMode {
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         pullupleft.setDirection(DcMotor.Direction.FORWARD);
         pullupright.setDirection(DcMotorSimple.Direction.REVERSE);
         pullupleft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -112,6 +123,10 @@ public class V3Farquaad extends LinearOpMode {
             }
 
             telemetry.addData("Wheel powers, fl, fr, bl, br: ", myDrive.drive(x, y, yaw * DRIVER_ROTATION_SCALAR, scalar, COURSE_CORRECT));
+            telemetry.addData("fl", fl.getCurrentPosition());
+            telemetry.addData("bl", bl.getCurrentPosition());
+            telemetry.addData("fr", fr.getCurrentPosition());
+            telemetry.addData("br", br.getCurrentPosition());
             telemetry.update();
 
             //gunner controls
