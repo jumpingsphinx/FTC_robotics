@@ -134,7 +134,9 @@ public class BlueEncoderAuto extends LinearOpMode {
         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         Wrapper wrapMotors = new Wrapper (fl,fr,bl,br);
+
         int pos = 3;
         while (opModeIsActive()) {
             pos = telemetryTfod();
@@ -306,6 +308,7 @@ public class BlueEncoderAuto extends LinearOpMode {
             }
             telemetry.addData("position", position);
         }   // end for() loop
+
         return position;
     }
     }
