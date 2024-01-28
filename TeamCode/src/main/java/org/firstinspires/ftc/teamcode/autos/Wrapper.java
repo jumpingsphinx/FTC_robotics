@@ -41,6 +41,10 @@ public class Wrapper {
         frontRight.setPower(frticksscaled);
         backRight.setPower(brticksscaled);
 
+        while (frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy()){
+
+        }
+
         ArrayList telemetrystuff = new ArrayList();
 
         telemetrystuff.add(frontLeft.getCurrentPosition());
