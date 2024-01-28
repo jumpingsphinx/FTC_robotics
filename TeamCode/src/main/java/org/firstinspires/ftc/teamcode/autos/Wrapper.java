@@ -12,38 +12,43 @@ public class Wrapper {
         this.backRight = backRight;
     }
     public ArrayList driveToEncoderPosition(int flticks, int blticks, int frticks,  int brticks){
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         frontLeft.setTargetPosition(flticks);
         backLeft.setTargetPosition(blticks);
         frontRight.setTargetPosition(frticks);
         backRight.setTargetPosition(brticks);
 
-        double max = Math.max(Math.abs(flticks), Math.max(Math.abs(frticks), Math.max(Math.abs(blticks), Math.abs(brticks))));
-        double flticksscaled = flticks / max;
-        double frticksscaled = frticks / max;
-        double blticksscaled = blticks / max;
-        double brticksscaled = brticks / max;
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+//        double max = Math.max(Math.abs(flticks), Math.max(Math.abs(frticks), Math.max(Math.abs(blticks), Math.abs(brticks))));
+//        double flticksscaled = flticks / max;
+//        double frticksscaled = frticks / max;
+//        double blticksscaled = blticks / max;
+//        double brticksscaled = brticks / max;
+//
+//
+//        if (scalar != 1.0){
+//            flticksscaled *= scalar;
+//            frticksscaled *= scalar;
+//            blticksscaled *= scalar;
+//            brticksscaled *= scalar;
+//        }
 
-        if (scalar != 1.0){
-            flticksscaled *= scalar;
-            frticksscaled *= scalar;
-            blticksscaled *= scalar;
-            brticksscaled *= scalar;
-        }
-
-        frontLeft.setPower(flticksscaled);
-        backLeft.setPower(blticksscaled);
-        frontRight.setPower(frticksscaled);
-        backRight.setPower(brticksscaled);
+        frontLeft.setPower(0.9);
+        backLeft.setPower(0.9);
+        frontRight.setPower(0.9);
+        backRight.setPower(0.9);
 
         while (frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy()){
-
         }
+
+        frontLeft.setPower(0);
+        backLeft.setPower(0);
+        frontRight.setPower(0);
+        backRight.setPower(0);
 
         ArrayList telemetrystuff = new ArrayList();
 

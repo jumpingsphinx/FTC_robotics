@@ -147,49 +147,29 @@ public class BlueEncoderAuto extends LinearOpMode {
         if (opModeIsActive()){
         if (pos == 3){
             telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-175,182,160,-131));
-            sleep(30);
+            sleep(1000);
             telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(711,1037,1064,754));
-            sleep(30);
+            sleep(1000);
             telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(1485,1789,227,-122));
-            sleep(30);
+            sleep(1000);
             telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(1543,1837,268,-90));
-            sleep(30);
+            sleep(1000);
             telemetry.addLine(purpleDropSequence());
-            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(338,631,-923,-1292));
-            sleep(30);
-            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(132,806,-763,-1491));
-            sleep(30);
-            telemetry.addLine(yellowDropSequence());
         }
         else if (pos == 2){
             telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-203,221,207,-201));
-            sleep(30);
+            sleep(1000);
             telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(549,967,1019,589));
-            sleep(30);
+            sleep(1000);
             telemetry.addLine(purpleDropSequence());
-            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(1308,1730,202,-291));
-            sleep(30);
-            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(178,610,-913,-1400));
-            sleep(30);
-            telemetry.addLine(yellowDropSequence());
         }
         // handle pos = 1
         else {
             telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-445, 405, 444, -402));
-            sleep(30);
+            sleep(1000);
             telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(3, 827, 875, 42));
-            sleep(30);
-            purpleDropSequence();
+            sleep(1000);
             telemetry.addLine(purpleDropSequence());
-            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(698, 1492, 7, -842));
-            sleep(30);
-            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(42, 825, -688, -150));
-            sleep(30);
-            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-221, 1141, -438, -1829));
-            sleep(30);
-            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-453, 887, -664, -2049));
-            sleep(30);
-            telemetry.addLine(yellowDropSequence());
         }
         }
         visionPortal.close();
@@ -201,25 +181,29 @@ public class BlueEncoderAuto extends LinearOpMode {
     private String purpleDropSequence() {
         wristleft.setPosition(WRIST_DOWN);
         wristright.setPosition(1 - WRIST_DOWN);
+        sleep(300);
         claw.setPosition(CLAW_OPEN_DROPOFF);
+        sleep(300);
         wristleft.setPosition(WRIST_UP);
         wristright.setPosition(1 - WRIST_UP);
+        sleep(200);
         claw.setPosition(CLAW_CLOSED);
+        sleep(200);
         return "Placed Purple!";
     }
     private String yellowDropSequence() {
-        hopper.setPosition(HOPPER_CLOSED);
-        wristleft.setPosition(WRIST_DOWN);
-        wristright.setPosition(1 - WRIST_DOWN);
-        lift.setPower(0.6);
-        sleep(1000);
-        lift.setPower(0);
-        hopper.setPosition(HOPPER_OPEN);
-        sleep(500);
-        hopper.setPosition(HOPPER_CLOSED);
-        lift.setPower(-0.6);
-        sleep(1000);
-        lift.setPower(0);
+//        hopper.setPosition(HOPPER_CLOSED);
+//        wristleft.setPosition(WRIST_DOWN);
+//        wristright.setPosition(1 - WRIST_DOWN);
+//        lift.setPower(0.6);
+//        sleep(1000);
+//        lift.setPower(0);
+//        hopper.setPosition(HOPPER_OPEN);
+//        sleep(500);
+//        hopper.setPosition(HOPPER_CLOSED);
+//        lift.setPower(-0.6);
+//        sleep(1000);
+//        lift.setPower(0);
         return "Placed Yellow!";
     }
     private void initTfod() {
