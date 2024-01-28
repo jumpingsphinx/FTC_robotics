@@ -90,7 +90,6 @@ public class BlueEncoderAuto extends LinearOpMode {
         telemetry.update();
 
         // Save more CPU resources when camera is no longer needed.
-        visionPortal.close();
         fl = hardwareMap.get(DcMotor.class, "leftFront");
         fr = hardwareMap.get(DcMotor.class, "rightFront");
         bl = hardwareMap.get(DcMotor.class, "leftBack");
@@ -138,14 +137,14 @@ public class BlueEncoderAuto extends LinearOpMode {
         Wrapper wrapMotors = new Wrapper (fl,fr,bl,br);
 
         int pos = 3;
-        while (opModeIsActive()) {
+        while (!opModeIsActive()) {
             pos = telemetryTfod();
             telemetry.addData("position: ", pos);
             telemetry.update();
             sleep(20);
         }
-
         waitForStart();
+        if (opModeIsActive()){
         if (pos == 3){
             telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-175,182,160,-131));
             sleep(30);
@@ -176,23 +175,24 @@ public class BlueEncoderAuto extends LinearOpMode {
         }
         // handle pos = 1
         else {
-            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-445,405,444,-402));
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-445, 405, 444, -402));
             sleep(30);
-            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(3,827,875,42));
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(3, 827, 875, 42));
             sleep(30);
             purpleDropSequence();
             telemetry.addLine(purpleDropSequence());
-            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(698,1492,7,-842));
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(698, 1492, 7, -842));
             sleep(30);
-            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(42,825,-688,-150));
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(42, 825, -688, -150));
             sleep(30);
-            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-221,1141,-438,-1829));
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-221, 1141, -438, -1829));
             sleep(30);
-            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-453,887,-664,-2049));
+            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-453, 887, -664, -2049));
             sleep(30);
             telemetry.addLine(yellowDropSequence());
         }
-
+        }
+        visionPortal.close();
     }
 
     /**
