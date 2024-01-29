@@ -23,19 +23,19 @@ public class Wrapper {
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-//        double max = Math.max(Math.abs(flticks), Math.max(Math.abs(frticks), Math.max(Math.abs(blticks), Math.abs(brticks))));
-//        double flticksscaled = flticks / max;
-//        double frticksscaled = frticks / max;
-//        double blticksscaled = blticks / max;
-//        double brticksscaled = brticks / max;
-//
-//
-//        if (scalar != 1.0){
-//            flticksscaled *= scalar;
-//            frticksscaled *= scalar;
-//            blticksscaled *= scalar;
-//            brticksscaled *= scalar;
-//        }
+        double max = Math.max(Math.abs(flticks), Math.max(Math.abs(frticks), Math.max(Math.abs(blticks), Math.abs(brticks))));
+        double flticksscaled = flticks / max;
+        double frticksscaled = frticks / max;
+        double blticksscaled = blticks / max;
+        double brticksscaled = brticks / max;
+
+
+        if (scalar != 1.0){
+            flticksscaled *= scalar;
+            frticksscaled *= scalar;
+            blticksscaled *= scalar;
+            brticksscaled *= scalar;
+        }
 
         frontLeft.setPower(0.9);
         backLeft.setPower(0.9);

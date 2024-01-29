@@ -1,26 +1,25 @@
 package org.firstinspires.ftc.teamcode.autos;
+
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.vision.ConceptTensorFlowObjectDetection;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import java.util.List;
 
 
 @Config
-@Autonomous(name = "BLUE_AUTO_PIXEL_ENCODER", group = "Autonomous")
-public class BlueEncoderAuto extends LinearOpMode {
+@Autonomous(name = "time auto kill me", group = "Autonomous")
+public class BlueTimeAuto extends LinearOpMode {
 
     public static final double DRIVER_SPEED_SCALAR = 0.85;
     public static final double DRIVER_SPRINT_MODE_SCALAR = 0.95;
@@ -56,6 +55,8 @@ public class BlueEncoderAuto extends LinearOpMode {
     private DcMotor lift;
     private DcMotor pullupleft;
     private DcMotor pullupright;
+
+    private ElapsedTime runtime = new ElapsedTime();
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -124,17 +125,10 @@ public class BlueEncoderAuto extends LinearOpMode {
         pullupleft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         pullupright.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        Wrapper wrapMotors = new Wrapper (fl,fr,bl,br);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         int pos = 3;
         while (!opModeIsActive()) {
@@ -144,48 +138,93 @@ public class BlueEncoderAuto extends LinearOpMode {
             sleep(20);
         }
         waitForStart();
+        runtime.reset();
 
-        if (opModeIsActive()){
-        if (pos == 3){
-            wrappypoo(-175, 182, 160, -131);
-//            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-175,182,160,-131));
-            sleep(1000);
-            wrappypoo(711,1037,1064,754);
-//            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(711,1037,1064,754));
-            sleep(1000);
-            wrappypoo(1485,1789,227,-122);
-//            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(1485,1789,227,-122));
-            sleep(1000);
-//            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(1543,1837,268,-90));
-            wrappypoo(1543,1837,268,-90);
-            sleep(1000);
-//            telemetry.addLine(purpleDropSequence());
-            purpleDropSequence();
+        if (opModeIsActive()) {
+            if (pos == 3) {
+
+//            while (runtime.seconds() < 1 && opModeIsActive()) {
+//                fl.setPower(0.5);
+//                fr.setPower(0.5);
+//                bl.setPower(0.5);
+//                br.setPower(0.5);
+//            }
+//            wristleft.setPosition(WRIST_DOWN);
+//            wristleft.setPosition(1-WRIST_DOWN);
+//            claw.setPosition(CLAW_OPEN_PICKUP);
+//            purpleDropSequence();
+
+            } else if (pos == 2) {
+                runtime.reset();
+                while (runtime.seconds() < .85 && opModeIsActive()) {
+                    fl.setPower(0.25);
+                    fr.setPower(0.25);
+                    bl.setPower(0.25);
+                    br.setPower(0.25);
+                }
+                while (runtime.seconds() < 3.5 && opModeIsActive()) {
+                    wristleft.setPosition(WRIST_DOWN);
+                    wristleft.setPosition(1 - WRIST_DOWN);
+//            purpleDropSequence();
+                }
+                while (runtime.seconds() < 5.5 && opModeIsActive()) {
+                    claw.setPosition(CLAW_OPEN_PICKUP);
+                }
+            }
+//                forward
+//                fl.setPower(0.25);
+//                fr.setPower(0.25);
+//                bl.setPower(0.25);
+//                br.setPower(0.25);
+//
+//                right
+//                fl.setPower(0.25);
+//                fr.setPower(-0.25);
+//                bl.setPower(-0.25);
+//                br.setPower(0.25);
+//
+//                left
+//                fl.setPower(-0.25);
+//                fr.setPower(0.25);
+//                bl.setPower(0.25);
+//                br.setPower(-0.25);
+//
+//                back
+//                fl.setPower(-0.25);
+//                fr.setPower(-0.25);
+//                bl.setPower(-0.25);
+//                br.setPower(-0.25);
         }
-        else if (pos == 2){
-//            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-203,221,207,-201));
-            wrappypoo(-203,221,207,-201);
-            sleep(1000);
-//            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(549,967,1019,589));
-            wrappypoo(549,967,1019,589);
-            sleep(1000);
 //            telemetry.addLine(purpleDropSequence());
-            purpleDropSequence();
-        }
+
         // handle pos = 1
         else {
-            wrappypoo(-445, 405, 444, -402);
-//            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-445, 405, 444, -402));
-            sleep(1000);
-            wrappypoo(3, 827, 875, 42);
-//            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(3, 827, 875, 42));
-            sleep(1000);
-//            telemetry.addLine(purpleDropSequence());
-            purpleDropSequence();
+//            while (runtime.seconds() < .85 && opModeIsActive()) {
+//
+//                //forward
+//                fl.setPower(-0.25);
+//                fr.setPower(0.25);
+//                bl.setPower(0.25);
+//                br.setPower(-0.25);
+//            }
+//            sleep(1000);
+//            purpleDropSequence();
+//
+//            sleep(1000);
+//
+//            runtime.reset();
+//            while (runtime.seconds() < .85 && opModeIsActive()) {
+//                fl.setPower(0.25);
+//                fr.setPower(0.25);
+//                bl.setPower(0.25);
+//                br.setPower(0.25);
+//
+//            }
         }
-        }
+
         visionPortal.close();
     }
+
 
     /**
      * Initialize the TensorFlow Object Detection processor.

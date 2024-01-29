@@ -32,10 +32,10 @@ public class DriveByTimePark extends LinearOpMode {
 
         waitForStart();
         if (isStopRequested()) return;
-        fl.setPower(-1);
-        fr.setPower(-1);
-        bl.setPower(-1);
-        br.setPower(-1);
+        fl.setPower(-0.25);
+        fr.setPower(-0.25);
+        bl.setPower(-0.25);
+        br.setPower(-0.25);
         sleep(2000);
         fl.setPower(0);
         fr.setPower(0);
