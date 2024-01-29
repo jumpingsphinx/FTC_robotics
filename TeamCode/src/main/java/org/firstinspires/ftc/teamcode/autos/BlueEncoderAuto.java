@@ -19,7 +19,7 @@ import java.util.List;
 
 
 @Config
-@Autonomous(name = "BLUE_AUTO_PIXEL_ENCODER", group = "Autonomous")
+@Autonomous(name = "BLUE_PURPLE_AUTO", group = "Autonomous")
 public class BlueEncoderAuto extends LinearOpMode {
 
     public static final double DRIVER_SPEED_SCALAR = 0.85;
@@ -167,7 +167,7 @@ public class BlueEncoderAuto extends LinearOpMode {
             wrappypoo(-203,221,207,-201);
             sleep(1000);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(549,967,1019,589));
-            wrappypoo(549,967,1019,589);
+            wrappypoo(525,925,975,550);
             sleep(1000);
 //            telemetry.addLine(purpleDropSequence());
             purpleDropSequence();
@@ -193,14 +193,16 @@ public class BlueEncoderAuto extends LinearOpMode {
     private String purpleDropSequence() {
         wristleft.setPosition(WRIST_DOWN);
         wristright.setPosition(1 - WRIST_DOWN);
-        sleep(300);
-        claw.setPosition(CLAW_OPEN_DROPOFF);
-        sleep(300);
+        sleep(1000);
+        claw.setPosition(CLAW_OPEN_PICKUP);
+        sleep(1000);
+        wrappypoo(fl.getCurrentPosition() - 50, bl.getCurrentPosition() - 50, fr.getCurrentPosition() - 50, br.getCurrentPosition() - 50);
+        sleep(500);
         wristleft.setPosition(WRIST_UP);
         wristright.setPosition(1 - WRIST_UP);
         sleep(200);
         claw.setPosition(CLAW_CLOSED);
-        sleep(200);
+        sleep(1000);
         return "Placed Purple!";
     }
     private String yellowDropSequence() {
@@ -325,10 +327,10 @@ public class BlueEncoderAuto extends LinearOpMode {
         double brticksscaled = brticks / max;
 
 
-        fl.setPower(0.9);
-        bl.setPower(0.9);
-        fr.setPower(0.9);
-        br.setPower(0.9);
+        fl.setPower(0.4);
+        bl.setPower(0.4);
+        fr.setPower(0.4);
+        br.setPower(0.4);
 
         while (fl.isBusy() || fr.isBusy() || bl.isBusy() || br.isBusy()){
             telemetry.addData("fl", fl.getCurrentPosition());

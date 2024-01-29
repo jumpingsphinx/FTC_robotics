@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.utils;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
-
+@Disabled
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Airplane Position Finder", group = "TeleOp")
 public class AirplanePositionFinder extends LinearOpMode {
     private Servo launcher;

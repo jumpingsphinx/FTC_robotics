@@ -25,7 +25,7 @@ public class V3Farquaad extends LinearOpMode {
     public static final double HOPPER_CLOSED = 0.38;
     public static final double CLAW_CLOSED = 0.67;
     public static final double CLAW_OPEN_PICKUP = 0.52;
-    public static final double CLAW_OPEN_DROPOFF = 0.60;
+    public static final double CLAW_OPEN_DROPOFF = 0.58;
     public static final double WRIST_UP = 0.13;
     public static final double WRIST_DOWN = 0.825;
     public static final double LAUNCHER_HOLD = 0.83;

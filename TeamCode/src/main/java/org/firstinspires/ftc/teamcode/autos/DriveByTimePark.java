@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Config
-@Autonomous(name = "DRIVE BY TIME PARK", group = "Autonomous")
+@Autonomous(name = "NEAR_PARK", group = "Autonomous")
 public class DriveByTimePark extends LinearOpMode {
     boolean finished = false;
 

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.utils;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
+@Disabled
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Front Wrist Sync", group = "TeleOp")
 public class WristSync extends LinearOpMode {
