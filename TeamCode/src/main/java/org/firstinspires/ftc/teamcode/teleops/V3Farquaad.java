@@ -17,7 +17,7 @@ public class V3Farquaad extends LinearOpMode {
     public static final double DRIVER_SLOW_MODE_SCALAR = 0.50;
     public static final double SENSITIVITY_THRESHOLD = 0.20;
     public static final double LIFT_SCALAR = 0.85;
-    public static final double PULL_SCALAR = 0.95;
+    public static final double PULL_SCALAR = 0.90;
     public static final double COURSE_CORRECT = 1.04;
 
     //GUNNER CONSTANTS
@@ -104,47 +104,74 @@ public class V3Farquaad extends LinearOpMode {
         double yaw = 0;
         double intakeTimer = System.currentTimeMillis();
         boolean checkCase = false;
+        boolean wasAPressed = false;
+        boolean wasYPressed = false;
+        boolean wasBumperTriggered = false;
+        wristleft.setPosition(WRIST_DOWN);
+        wristright.setPosition(1-WRIST_DOWN);
+        claw.setPosition(CLAW_CLOSED);
 
         waitForStart();
         while (opModeIsActive()) {
             double currentTime = System.currentTimeMillis();
             //gunner controls
-            if (gamepad2.x){
+            //claw logic
+            if (gamepad2.y && !wasYPressed){
+                wasYPressed = true;
+                if (claw.getPosition() > CLAW_OPEN_PICKUP - 0.035 && claw.getPosition() < CLAW_OPEN_DROPOFF + 0.035){
+                    claw.setPosition(CLAW_CLOSED);
+                }
+                else if (claw.getPosition() > CLAW_CLOSED - 0.035 && claw.getPosition() < CLAW_CLOSED + 0.035){
+                    if (wristleft.getPosition() > WRIST_DOWN - 0.035 && wristleft.getPosition() < WRIST_DOWN + 0.035){
+                        claw.setPosition(CLAW_OPEN_PICKUP);
+                    }
+                    else if (wristleft.getPosition() > WRIST_UP - 0.035 && wristleft.getPosition() < WRIST_UP + 0.035){
+                        claw.setPosition(CLAW_OPEN_DROPOFF);
+                    }
+                    else {
+                        claw.setPosition(CLAW_OPEN_DROPOFF);
+                    }
+                }
+            }
+            if (!gamepad2.y){
+                wasYPressed = false;
+            }
+
+            //wrist logic
+            if (gamepad2.a && !wasAPressed){
+                wasAPressed = true;
                 if (wristleft.getPosition() > WRIST_DOWN - 0.035 && wristleft.getPosition() < WRIST_DOWN + 0.035){
-                    claw.setPosition(CLAW_OPEN_PICKUP);
+                    wristleft.setPosition(WRIST_UP);
+                    wristright.setPosition(1-WRIST_UP);
                 }
                 else if (wristleft.getPosition() > WRIST_UP - 0.035 && wristleft.getPosition() < WRIST_UP + 0.035){
-                    claw.setPosition(CLAW_OPEN_DROPOFF);
-                }
-                else {
-                    claw.setPosition(CLAW_OPEN_PICKUP);
+                    wristleft.setPosition(WRIST_DOWN);
+                    wristright.setPosition(1-WRIST_DOWN);
                 }
             }
-            else if (gamepad2.b){
-                claw.setPosition(CLAW_CLOSED);
+            else if (!gamepad2.a){
+                wasAPressed = false;
             }
-            //wrist ground
-            if (gamepad2.a){
-                wristleft.setPosition(WRIST_DOWN);
-                wristright.setPosition(1-WRIST_DOWN);
+
+            if (gamepad2.left_bumper && !wasBumperTriggered){
+                wasBumperTriggered = true;
+                if (hopper.getPosition() > HOPPER_CLOSED - 0.035 && hopper.getPosition() < HOPPER_CLOSED + 0.035){
+                    hopper.setPosition(HOPPER_OPEN);
+                }
+                else if (hopper.getPosition() > HOPPER_OPEN - 0.035 && hopper.getPosition() < HOPPER_OPEN + 0.035){
+                    hopper.setPosition(HOPPER_CLOSED);
+                }
             }
-            //wrist flip
-            else if (gamepad2.y){
-                wristleft.setPosition(WRIST_UP);
-                wristright.setPosition(1-WRIST_UP);
+            else if (!gamepad2.left_bumper){
+                wasBumperTriggered = false;
             }
-            if (gamepad2.left_bumper){
-                hopper.setPosition(HOPPER_CLOSED);
-            }
-            else if (gamepad2.right_bumper){
-                hopper.setPosition(HOPPER_OPEN);
-            }
-            if (gamepad2.left_trigger > 0.5){
+
+            if (gamepad2.left_trigger > 0.5 && gamepad2.right_trigger > 0.5){
                 launcher.setPosition(LAUNCHER_RELEASE);
             }
             // lift controls
-            if (Math.abs(gamepad2.right_stick_y) > SENSITIVITY_THRESHOLD){
-                double power = -gamepad2.right_stick_y;
+            if (Math.abs(gamepad2.left_stick_y) > SENSITIVITY_THRESHOLD){
+                double power = -gamepad2.left_stick_y;
                 lift.setPower(power *
                         LIFT_SCALAR);
             }
@@ -211,10 +238,13 @@ public class V3Farquaad extends LinearOpMode {
             telemetry.update();
 
             // pull up controls
-            if (Math.abs(gamepad2.left_stick_y) > SENSITIVITY_THRESHOLD){
-                double power = -gamepad2.left_stick_y;
-                pullupright.setPower(power * PULL_SCALAR);
-                pullupleft.setPower(power * PULL_SCALAR);
+            if (gamepad1.dpad_up){
+                pullupright.setPower(PULL_SCALAR);
+                pullupleft.setPower(PULL_SCALAR);
+            }
+            else if (gamepad1.dpad_down){
+                pullupright.setPower(-PULL_SCALAR);
+                pullupleft.setPower(-PULL_SCALAR);
             }
             else{
                 pullupright.setPower(0);
