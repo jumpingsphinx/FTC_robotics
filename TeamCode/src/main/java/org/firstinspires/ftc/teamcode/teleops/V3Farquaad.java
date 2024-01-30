@@ -114,7 +114,7 @@ public class V3Farquaad extends LinearOpMode {
 
             //gunner controls
             if (gamepad2.x){
-                if (isClawOpen) {
+                if (!isClawOpen) {
                     if (wristleft.getPosition() > WRIST_DOWN - 0.035 && wristleft.getPosition() < WRIST_DOWN + 0.035) {
                         claw.setPosition(CLAW_OPEN_PICKUP);
                     } else if (wristleft.getPosition() > WRIST_UP - 0.035 && wristleft.getPosition() < WRIST_UP + 0.035) {
@@ -141,14 +141,14 @@ public class V3Farquaad extends LinearOpMode {
                 isWristUp = !isWristUp;
             }
 
-            if (gamepad2.left_bumper){
-                hopper.setPosition(HOPPER_CLOSED);
-            }
             if (gamepad2.right_bumper){
-                if (isHopperOpen){
-
+                if (!isHopperOpen){
+                    hopper.setPosition(HOPPER_OPEN);
                 }
-                hopper.setPosition(HOPPER_OPEN);
+                else {
+                    hopper.setPosition(HOPPER_CLOSED);
+                }
+                isHopperOpen = !isHopperOpen;
             }
             if (gamepad2.left_trigger > 0.5){
                 launcher.setPosition(LAUNCHER_RELEASE);
