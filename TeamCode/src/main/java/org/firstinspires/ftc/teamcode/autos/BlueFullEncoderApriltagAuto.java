@@ -10,25 +10,22 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
+
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
 
 import java.util.List;
+import java.util.ArrayList;
 
 
 @Config
 @Autonomous(name = "BLUE_FULL_AUTO", group = "Autonomous")
-public class BlueFullEncoderAuto extends LinearOpMode {
+public class BlueFullEncoderApriltagAuto extends LinearOpMode {
 
     public static final double DRIVER_SPEED_SCALAR = 0.85;
     public static final double DRIVER_SPRINT_MODE_SCALAR = 0.95;
@@ -87,6 +84,24 @@ public class BlueFullEncoderAuto extends LinearOpMode {
      * The variable to store our instance of the vision portal.
      */
     private VisionPortal visionPortal;
+    OpenCvCamera camera;
+    AprilTagDetectionPipeline aprilTagDetectionPipeline;
+
+    static final double FEET_PER_METER = 3.28084;
+
+    // Lens intrinsics
+    // UNITS ARE PIXELS
+    // NOTE: this calibration is for the C920 webcam at 800x448.
+    // You will need to do your own calibration for other configurations!
+    double fx = 578.272;
+    double fy = 578.272;
+    double cx = 402.145;
+    double cy = 221.506;
+
+    // UNITS ARE METERS
+    double tagsize = 0.166;
+    AprilTagDetection tagOfInterest = null;
+
 
     @Override
     public void runOpMode() {
@@ -143,6 +158,26 @@ public class BlueFullEncoderAuto extends LinearOpMode {
         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+
+        camera.setPipeline(aprilTagDetectionPipeline);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+
+            }
+        });
+        telemetry.setMsTransmissionInterval(50);
 
 
         Wrapper wrapMotors = new Wrapper (fl,fr,bl,br);
@@ -157,62 +192,67 @@ public class BlueFullEncoderAuto extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()){
-        if (pos == 3){
-            wrappypoo(-175, 182, 160, -131);
+            if (pos == 3){
+                int ID_TAG_OF_INTEREST = 1;
+                wrappypoo(-175, 182, 160, -131);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-175,182,160,-131));
-            sleep(200);
-            wrappypoo(711,1037,1064,754);
+                sleep(200);
+                wrappypoo(711,1037,1064,754);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(711,1037,1064,754));
-            sleep(200);
-            wrappypoo(1485,1789,227,-122);
+                sleep(200);
+                wrappypoo(1485,1789,227,-122);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(1485,1789,227,-122));
-            sleep(200);
+                sleep(200);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(1543,1837,268,-90));
-            wrappypoo(1543,1837,268,-90);
-            sleep(200);
+                wrappypoo(1543,1837,268,-90);
+                sleep(200);
 //            telemetry.addLine(purpleDropSequence());
-            purpleDropSequence();
-            wrappypoo(338,631,-923,-1292);
-            sleep(200);
-            wrappypoo(132,806,-763,-1491);
-            sleep(200);
-            yellowDropSequence();
-        }
-        else if (pos == 2){
+                purpleDropSequence();
+                wrappypoo(338,631,-923,-1292);
+                sleep(200);
+                wrappypoo(132,806,-763,-1491);
+                sleep(200);
+
+                ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
+                yellowDropSequence();
+            }
+            else if (pos == 2){
+                int ID_TAG_OF_INTEREST = 2;
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-203,221,207,-201));
-            wrappypoo(-203,221,207,-201);
-            sleep(200);
+                wrappypoo(-203,221,207,-201);
+                sleep(200);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(549,967,1019,589));
-            wrappypoo(525,925,975,550);
-            sleep(200);
+                wrappypoo(525,925,975,550);
+                sleep(200);
 //            telemetry.addLine(purpleDropSequence());
-            purpleDropSequence();
-            wrappypoo(1300,1730,202,-291);
-            sleep(200);
-            wrappypoo(140,580,-943,-1430);
-            sleep(200);
-            yellowDropSequence();
-        }
-        // handle pos = 1
-        else {
-            wrappypoo(-445, 405, 444, -402);
+                purpleDropSequence();
+                wrappypoo(1300,1730,202,-291);
+                sleep(200);
+                wrappypoo(140,580,-943,-1430);
+                sleep(200);
+                yellowDropSequence();
+            }
+            // handle pos = 1
+            else {
+                int ID_TAG_OF_INTEREST = 3;
+                wrappypoo(-445, 405, 444, -402);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-445, 405, 444, -402));
-            sleep(200);
-            wrappypoo(3, 827, 875, 42);
+                sleep(200);
+                wrappypoo(3, 827, 875, 42);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(3, 827, 875, 42));
-            sleep(200);
+                sleep(200);
 //            telemetry.addLine(purpleDropSequence());
-            purpleDropSequence();
-            wrappypoo(698,1492,7,-842);
-            sleep(200);
-            wrappypoo(42,825,-688,-1530);
-            sleep(200);
-            wrappypoo(-221,1141,-438,-1829);
-            sleep(200);
-            wrappypoo(-435,887,-664,-2049);
-            sleep(200);
-            yellowDropSequence();
-        }
+                purpleDropSequence();
+                wrappypoo(698,1492,7,-842);
+                sleep(200);
+                wrappypoo(42,825,-688,-1530);
+                sleep(200);
+                wrappypoo(-221,1141,-438,-1829);
+                sleep(200);
+                wrappypoo(-435,887,-664,-2049);
+                sleep(200);
+                yellowDropSequence();
+            }
         }
         visionPortal.close();
     }
@@ -383,5 +423,5 @@ public class BlueFullEncoderAuto extends LinearOpMode {
 
     }
 
-    }
+}
 
