@@ -108,6 +108,49 @@ public class V3Farquaad extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             double currentTime = System.currentTimeMillis();
+            //gunner controls
+            if (gamepad2.x){
+                if (wristleft.getPosition() > WRIST_DOWN - 0.035 && wristleft.getPosition() < WRIST_DOWN + 0.035){
+                    claw.setPosition(CLAW_OPEN_PICKUP);
+                }
+                else if (wristleft.getPosition() > WRIST_UP - 0.035 && wristleft.getPosition() < WRIST_UP + 0.035){
+                    claw.setPosition(CLAW_OPEN_DROPOFF);
+                }
+                else {
+                    claw.setPosition(CLAW_OPEN_PICKUP);
+                }
+            }
+            else if (gamepad2.b){
+                claw.setPosition(CLAW_CLOSED);
+            }
+            //wrist ground
+            if (gamepad2.a){
+                wristleft.setPosition(WRIST_DOWN);
+                wristright.setPosition(1-WRIST_DOWN);
+            }
+            //wrist flip
+            else if (gamepad2.y){
+                wristleft.setPosition(WRIST_UP);
+                wristright.setPosition(1-WRIST_UP);
+            }
+            if (gamepad2.left_bumper){
+                hopper.setPosition(HOPPER_CLOSED);
+            }
+            else if (gamepad2.right_bumper){
+                hopper.setPosition(HOPPER_OPEN);
+            }
+            if (gamepad2.left_trigger > 0.5){
+                launcher.setPosition(LAUNCHER_RELEASE);
+            }
+            // lift controls
+            if (Math.abs(gamepad2.right_stick_y) > SENSITIVITY_THRESHOLD){
+                double power = -gamepad2.right_stick_y;
+                lift.setPower(power *
+                        LIFT_SCALAR);
+            }
+            else{
+                lift.setPower(0);
+            }
 
             currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
             if (gamepad1.x && !checkCase){
@@ -167,49 +210,6 @@ public class V3Farquaad extends LinearOpMode {
             telemetry.addData("br", br.getCurrentPosition());
             telemetry.update();
 
-            //gunner controls
-            if (gamepad2.x){
-                if (wristleft.getPosition() > WRIST_DOWN - 0.035 && wristleft.getPosition() < WRIST_DOWN + 0.035){
-                claw.setPosition(CLAW_OPEN_PICKUP);
-                }
-                else if (wristleft.getPosition() > WRIST_UP - 0.035 && wristleft.getPosition() < WRIST_UP + 0.035){
-                    claw.setPosition(CLAW_OPEN_DROPOFF);
-                }
-                else {
-                    claw.setPosition(CLAW_OPEN_PICKUP);
-                }
-            }
-            else if (gamepad2.b){
-                claw.setPosition(CLAW_CLOSED);
-            }
-            //wrist ground
-            if (gamepad2.a){
-                wristleft.setPosition(WRIST_DOWN);
-                wristright.setPosition(1-WRIST_DOWN);
-            }
-            //wrist flip
-            else if (gamepad2.y){
-                wristleft.setPosition(WRIST_UP);
-                wristright.setPosition(1-WRIST_UP);
-            }
-            if (gamepad2.left_bumper){
-                hopper.setPosition(HOPPER_CLOSED);
-            }
-            else if (gamepad2.right_bumper){
-                hopper.setPosition(HOPPER_OPEN);
-            }
-            if (gamepad2.left_trigger > 0.5){
-                launcher.setPosition(LAUNCHER_RELEASE);
-            }
-            // lift controls
-            if (Math.abs(gamepad2.right_stick_y) > SENSITIVITY_THRESHOLD){
-                double power = -gamepad2.right_stick_y;
-                lift.setPower(power *
-                        LIFT_SCALAR);
-            }
-            else{
-                lift.setPower(0);
-            }
             // pull up controls
             if (Math.abs(gamepad2.left_stick_y) > SENSITIVITY_THRESHOLD){
                 double power = -gamepad2.left_stick_y;
