@@ -172,8 +172,7 @@ public class V3Farquaad extends LinearOpMode {
             // lift controls
             if (Math.abs(gamepad2.left_stick_y) > SENSITIVITY_THRESHOLD){
                 double power = -gamepad2.left_stick_y;
-                lift.setPower(power *
-                        LIFT_SCALAR);
+                lift.setPower(power * LIFT_SCALAR);
             }
             else{
                 lift.setPower(0);
