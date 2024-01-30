@@ -10,25 +10,27 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
+
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+import org.openftc.apriltag.AprilTagDetection;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.openftc.apriltag.AprilTagDetection;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
 
 import java.util.List;
+import java.util.ArrayList;
 
 
 @Config
-@Autonomous(name = "BLUE_FULL_AUTO", group = "Autonomous")
-public class BlueFullEncoderAuto extends LinearOpMode {
+@Autonomous(name = "BLUE_FULL_APRILTAG_AUTO", group = "Autonomous")
+public class BlueFullEncoderApriltagAuto extends LinearOpMode {
 
     public static final double DRIVER_SPEED_SCALAR = 0.85;
     public static final double DRIVER_SPRINT_MODE_SCALAR = 0.95;
@@ -87,6 +89,24 @@ public class BlueFullEncoderAuto extends LinearOpMode {
      * The variable to store our instance of the vision portal.
      */
     private VisionPortal visionPortal;
+    OpenCvCamera camera;
+    AprilTagDetectionPipeline aprilTagDetectionPipeline;
+
+    static final double FEET_PER_METER = 3.28084;
+
+    // Lens intrinsics
+    // UNITS ARE PIXELS
+    // NOTE: this calibration is for the C920 webcam at 800x448.
+    // You will need to do your own calibration for other configurations!
+    double fx = 578.272;
+    double fy = 578.272;
+    double cx = 402.145;
+    double cy = 221.506;
+
+    // UNITS ARE METERS
+    double tagsize = 0.166;
+    AprilTagDetection tagOfInterest = null;
+
 
     @Override
     public void runOpMode() {
@@ -143,6 +163,26 @@ public class BlueFullEncoderAuto extends LinearOpMode {
         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+
+        camera.setPipeline(aprilTagDetectionPipeline);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+
+            }
+        });
+        telemetry.setMsTransmissionInterval(50);
 
 
         Wrapper wrapMotors = new Wrapper (fl,fr,bl,br);
@@ -176,9 +216,11 @@ public class BlueFullEncoderAuto extends LinearOpMode {
                 sleep(200);
                 wrappypoo(132,806,-763,-1491);
                 sleep(200);
-                yellowDropSequence();
+                apriltagthingy(3);
+
             }
             else if (pos == 2){
+                int ID_TAG_OF_INTEREST = 2;
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-203,221,207,-201));
                 wrappypoo(-203,221,207,-201);
                 sleep(200);
@@ -191,10 +233,11 @@ public class BlueFullEncoderAuto extends LinearOpMode {
                 sleep(200);
                 wrappypoo(140,580,-943,-1430);
                 sleep(200);
-                yellowDropSequence();
+                apriltagthingy(3);
             }
             // handle pos = 1
             else {
+                int ID_TAG_OF_INTEREST = 1;
                 wrappypoo(-445, 405, 444, -402);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-445, 405, 444, -402));
                 sleep(200);
@@ -211,7 +254,7 @@ public class BlueFullEncoderAuto extends LinearOpMode {
                 sleep(200);
                 wrappypoo(-435,887,-664,-2049);
                 sleep(200);
-                yellowDropSequence();
+                apriltagthingy(3);
             }
         }
         visionPortal.close();
@@ -253,63 +296,22 @@ public class BlueFullEncoderAuto extends LinearOpMode {
         return "Placed Yellow!";
     }
     private void initTfod() {
-
-        // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
-
-                // With the following lines commented out, the default TfodProcessor Builder
-                // will load the default model for the season. To define a custom model to load,
-                // choose one of the following:
-                //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
-                //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
                 .setModelAssetName(TFOD_MODEL_ASSET)
-                //.setModelFileName(TFOD_MODEL_FILE)
-
-                // The following default settings are available to un-comment and edit as needed to
-                // set parameters for custom models.
                 .setModelLabels(LABELS)
-                //.setIsModelTensorFlow2(true)
-                //.setIsModelQuantized(true)
-                //.setModelInputSize(300)
-                //.setModelAspectRatio(16.0 / 9.0)
-
                 .build();
 
-        // Create the vision portal by using a builder.
         VisionPortal.Builder builder = new VisionPortal.Builder();
 
-        // Set the camera (webcam vs. built-in RC phone camera).
         if (USE_WEBCAM) {
             builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
         } else {
             builder.setCamera(BuiltinCameraDirection.BACK);
         }
 
-        // Choose a camera resolution. Not all cameras support all resolutions.
-        //builder.setCameraResolution(new Size(640, 480));
-
-        // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
-        //builder.enableLiveView(true);
-
-        // Set the stream format; MJPEG uses less bandwidth than default YUY2.
-        //builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
-
-        // Choose whether or not LiveView stops if no processors are enabled.
-        // If set "true", monitor shows solid orange screen if no processors enabled.
-        // If set "false", monitor shows camera view without annotations.
-        //builder.setAutoStopLiveView(false);
-
-        // Set and enable the processor.
         builder.addProcessor(tfod);
 
-        // Build the Vision Portal, using the above settings.
         visionPortal = builder.build();
-
-        // Set confidence threshold for TFOD recognitions, at any time.
-        //tfod.setMinResultConfidence(0.75f);
-
-        // Disable or re-enable the TFOD processor at any time.
-        //visionPortal.setProcessorEnabled(tfod, true);
 
     }   // end method initTfod()
 
@@ -382,5 +384,83 @@ public class BlueFullEncoderAuto extends LinearOpMode {
         br.setPower(0);
 
     }
+    void tagToTelemetry(AprilTagDetection detection)
+    {
+        Orientation rot = Orientation.getOrientation(detection.pose.R, AxesReference.INTRINSIC, AxesOrder.YXZ, AngleUnit.DEGREES);
+
+        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
+        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
+        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z*FEET_PER_METER));
+        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", rot.firstAngle));
+        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", rot.secondAngle));
+        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", rot.thirdAngle));
+    }
+    public void apriltagthingy(int ID_TAG_OF_INTEREST){
+        ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
+        if(currentDetections.size() != 0)
+        {
+            boolean tagFound = false;
+
+            for(AprilTagDetection tag : currentDetections)
+            {
+                if(tag.id == ID_TAG_OF_INTEREST)
+                {
+                    tagOfInterest = tag;
+                    tagFound = true;
+                    break;
+                }
+            }
+
+            if(tagFound)
+            {
+                telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
+                tagToTelemetry(tagOfInterest);
+            }
+            else
+            {
+                telemetry.addLine("Don't see tag of interest :(");
+
+                if(tagOfInterest == null)
+                {
+                    telemetry.addLine("(The tag has never been seen)");
+                }
+                else
+                {
+                    telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                    tagToTelemetry(tagOfInterest);
+                }
+            }
+
+        }
+        else
+        {
+            telemetry.addLine("Don't see tag of interest :(");
+
+            if(tagOfInterest == null)
+            {
+                telemetry.addLine("(The tag has never been seen)");
+            }
+            else
+            {
+                telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                tagToTelemetry(tagOfInterest);
+            }
+
+            if(tagOfInterest.pose.x < 0.1)
+            {
+                // move one way
+            }
+            else if(tagOfInterest.pose.x > 0.1)
+            {
+                // move the other way
+            }
+            else if(tagOfInterest.pose.x >= 50)
+            {
+                yellowDropSequence();
+            }
+        }
+    }
 
 }
+
