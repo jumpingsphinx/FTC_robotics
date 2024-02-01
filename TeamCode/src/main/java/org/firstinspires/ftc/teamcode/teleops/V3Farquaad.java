@@ -116,6 +116,7 @@ public class V3Farquaad extends LinearOpMode {
             double currentTime = System.currentTimeMillis();
             //gunner controls
             //claw logic
+
             if (gamepad2.y && !wasYPressed){
                 wasYPressed = true;
                 if (claw.getPosition() > CLAW_OPEN_PICKUP - 0.035 && claw.getPosition() < CLAW_OPEN_DROPOFF + 0.035){
@@ -133,10 +134,12 @@ public class V3Farquaad extends LinearOpMode {
                     }
                 }
             }
-            if (!gamepad2.y){
+            else if (!gamepad2.y){
                 wasYPressed = false;
             }
-
+            if (gamepad2.left_trigger > 0.5 && gamepad2.right_trigger > 0.5){
+                launcher.setPosition(LAUNCHER_RELEASE);
+            }
             //wrist logic
             if (gamepad2.a && !wasAPressed){
                 wasAPressed = true;
@@ -152,7 +155,6 @@ public class V3Farquaad extends LinearOpMode {
             else if (!gamepad2.a){
                 wasAPressed = false;
             }
-
             if (gamepad2.left_bumper && !wasBumperTriggered){
                 wasBumperTriggered = true;
                 if (hopper.getPosition() > HOPPER_CLOSED - 0.035 && hopper.getPosition() < HOPPER_CLOSED + 0.035){
@@ -166,9 +168,6 @@ public class V3Farquaad extends LinearOpMode {
                 wasBumperTriggered = false;
             }
 
-            if (gamepad2.left_trigger > 0.5 && gamepad2.right_trigger > 0.5){
-                launcher.setPosition(LAUNCHER_RELEASE);
-            }
             // lift controls
             if (Math.abs(gamepad2.left_stick_y) > SENSITIVITY_THRESHOLD){
                 double power = -gamepad2.left_stick_y;
@@ -180,7 +179,7 @@ public class V3Farquaad extends LinearOpMode {
 
             currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
             if (gamepad1.x && !checkCase){
-                if (currentDistance > 1.5){
+                if (currentDistance > 4.5){
                     fl.setPower(-0.35);
                     fr.setPower(-0.35);
                     br.setPower(-0.35);
@@ -193,7 +192,7 @@ public class V3Farquaad extends LinearOpMode {
                 }
             }
             if (checkCase){
-                if (currentDistance > 1.5){
+                if (currentDistance > 4.5){
                     fl.setPower(-0.35);
                     fr.setPower(-0.35);
                     br.setPower(-0.35);
@@ -237,15 +236,12 @@ public class V3Farquaad extends LinearOpMode {
             telemetry.update();
 
             // pull up controls
-            if (gamepad1.dpad_up){
-                pullupright.setPower(PULL_SCALAR);
-                pullupleft.setPower(PULL_SCALAR);
+            if (Math.abs(gamepad2.right_stick_y) > SENSITIVITY_THRESHOLD){
+                double power = gamepad2.right_stick_y;
+                pullupright.setPower(power * PULL_SCALAR);
+                pullupleft.setPower(power * PULL_SCALAR);
             }
-            else if (gamepad1.dpad_down){
-                pullupright.setPower(-PULL_SCALAR);
-                pullupleft.setPower(-PULL_SCALAR);
-            }
-            else{
+            else {
                 pullupright.setPower(0);
                 pullupleft.setPower(0);
             }
