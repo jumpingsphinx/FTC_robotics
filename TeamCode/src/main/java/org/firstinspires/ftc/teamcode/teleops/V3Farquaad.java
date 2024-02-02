@@ -188,8 +188,10 @@ public class V3Farquaad extends LinearOpMode {
             if (Math.abs(gamepad2.left_stick_y) > SENSITIVITY_THRESHOLD){
                 double power = -gamepad2.left_stick_y;
                 lift.setPower(power * LIFT_SCALAR);
-                wristleft.setPosition(WRIST_SAFE);
-                wristright.setPosition(1 - WRIST_SAFE);
+                if (power > 0) {
+                    wristleft.setPosition(WRIST_SAFE);
+                    wristright.setPosition(1 - WRIST_SAFE);
+                }
             }
             else{
                 lift.setPower(0);
