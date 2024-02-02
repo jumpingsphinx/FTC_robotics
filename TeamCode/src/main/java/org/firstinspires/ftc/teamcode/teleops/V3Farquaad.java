@@ -28,6 +28,7 @@ public class V3Farquaad extends LinearOpMode {
     public static final double CLAW_OPEN_PICKUP = 0.52;
     public static final double CLAW_OPEN_DROPOFF = 0.58;
     public static final double WRIST_UP = 0.13;
+    public static final double WRIST_SAFE = 0.6;
     public static final double WRIST_DOWN = 0.825;
     public static final double LAUNCHER_HOLD = 0.83;
     public static final double LAUNCHER_RELEASE = 0.68;
@@ -158,9 +159,13 @@ public class V3Farquaad extends LinearOpMode {
                     wristleft.setPosition(WRIST_UP);
                     wristright.setPosition(1-WRIST_UP);
                 }
-                else if (wristleft.getPosition() > WRIST_UP - 0.035 && wristleft.getPosition() < WRIST_UP + 0.035){
+                else if (wristleft.getPosition() > WRIST_UP - 0.035 && wristleft.getPosition() < WRIST_UP + 0.035) {
                     wristleft.setPosition(WRIST_DOWN);
-                    wristright.setPosition(1-WRIST_DOWN);
+                    wristright.setPosition(1 - WRIST_DOWN);
+                }
+                else if (wristleft.getPosition() > WRIST_SAFE - 0.035 && wristleft.getPosition() < WRIST_SAFE + 0.035) {
+                    wristleft.setPosition(WRIST_DOWN);
+                    wristright.setPosition(1 - WRIST_DOWN);
                 }
             }
             else if (!gamepad2.a){
@@ -183,6 +188,8 @@ public class V3Farquaad extends LinearOpMode {
             if (Math.abs(gamepad2.left_stick_y) > SENSITIVITY_THRESHOLD){
                 double power = -gamepad2.left_stick_y;
                 lift.setPower(power * LIFT_SCALAR);
+                wristleft.setPosition(WRIST_SAFE);
+                wristright.setPosition(1 - WRIST_SAFE);
             }
             else{
                 lift.setPower(0);
