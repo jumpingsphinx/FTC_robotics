@@ -5,10 +5,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
@@ -64,6 +67,9 @@ public class BlueFullEncoderAuto extends LinearOpMode {
     private DcMotor lift;
     private DcMotor pullupleft;
     private DcMotor pullupright;
+    public double currentDistance = 0;
+    private DistanceSensor backDistanceSensor;
+    private IMU imu;
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -111,6 +117,8 @@ public class BlueFullEncoderAuto extends LinearOpMode {
         claw = hardwareMap.get(Servo.class, "claw");
         hopper = hardwareMap.get(Servo.class, "hopper");
         launcher = hardwareMap.get(Servo.class, "launcher");
+        backDistanceSensor = hardwareMap.get(DistanceSensor.class, "backdistance");
+        imu = hardwareMap.get(IMU.class, "imu");
         claw.setPosition(CLAW_CLOSED);
         launcher.setPosition(LAUNCHER_HOLD);
         hopper.setPosition(HOPPER_CLOSED);
@@ -160,59 +168,105 @@ public class BlueFullEncoderAuto extends LinearOpMode {
             if (pos == 3){
                 wrappypoo(-175, 182, 160, -131);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-175,182,160,-131));
-                sleep(200);
+                sleep(1);
                 wrappypoo(711,1037,1064,754);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(711,1037,1064,754));
-                sleep(200);
+                sleep(1);
                 wrappypoo(1485,1789,227,-122);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(1485,1789,227,-122));
-                sleep(200);
+                sleep(1);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(1543,1837,268,-90));
                 wrappypoo(1543,1837,268,-90);
-                sleep(200);
+                sleep(1);
 //            telemetry.addLine(purpleDropSequence());
                 purpleDropSequence();
                 wrappypoo(338,631,-923,-1292);
-                sleep(200);
+                sleep(1);
                 wrappypoo(132,806,-763,-1491);
-                sleep(200);
+                sleep(1);
+                currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
+                while (currentDistance > 5.5){
+                    fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    fl.setPower(-0.35);
+                    fr.setPower(-0.35);
+                    br.setPower(-0.35);
+                    bl.setPower(-0.35);
+                    sleep(25);
+                    currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
+                }
                 yellowDropSequence();
+                wrappypoo(fl.getCurrentPosition() + 800,bl.getCurrentPosition() - 800,fr.getCurrentPosition() - 800,br.getCurrentPosition() + 800);
+                sleep(1);
+                wrappypoo(fl.getCurrentPosition() - 300,bl.getCurrentPosition() - 300,fr.getCurrentPosition() - 300,br.getCurrentPosition() - 300);
             }
             else if (pos == 2){
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-203,221,207,-201));
                 wrappypoo(-203,221,207,-201);
-                sleep(200);
+                sleep(1);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(549,967,1019,589));
                 wrappypoo(525,925,975,550);
-                sleep(200);
+                sleep(1);
 //            telemetry.addLine(purpleDropSequence());
                 purpleDropSequence();
                 wrappypoo(1300,1730,202,-291);
-                sleep(200);
+                sleep(1);
                 wrappypoo(140,580,-943,-1430);
-                sleep(200);
+                sleep(1);
+                currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
+                while (currentDistance > 5.5){
+                    fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    fl.setPower(-0.35);
+                    fr.setPower(-0.35);
+                    br.setPower(-0.35);
+                    bl.setPower(-0.35);
+                    sleep(25);
+                    currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
+                }
                 yellowDropSequence();
-            }
+                wrappypoo(fl.getCurrentPosition() + 800,bl.getCurrentPosition() - 800,fr.getCurrentPosition() - 800,br.getCurrentPosition() + 800);
+                sleep(1);
+                wrappypoo(fl.getCurrentPosition() - 300,bl.getCurrentPosition() - 300,fr.getCurrentPosition() - 300,br.getCurrentPosition() - 300);     }
             // handle pos = 1
             else {
                 wrappypoo(-445, 405, 444, -402);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(-445, 405, 444, -402));
-                sleep(200);
+                sleep(1);
                 wrappypoo(3, 827, 875, 42);
 //            telemetry.addData("fl, fr, bl, br", wrapMotors.driveToEncoderPosition(3, 827, 875, 42));
-                sleep(200);
+                sleep(1);
 //            telemetry.addLine(purpleDropSequence());
                 purpleDropSequence();
                 wrappypoo(698,1492,7,-842);
-                sleep(200);
+                sleep(1);
                 wrappypoo(42,825,-688,-1530);
-                sleep(200);
+                sleep(1);
                 wrappypoo(-221,1141,-438,-1829);
-                sleep(200);
+                sleep(1);
                 wrappypoo(-435,887,-664,-2049);
-                sleep(200);
+                sleep(1);
+                currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
+                while (currentDistance > 5.5){
+                    fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    fl.setPower(-0.35);
+                    fr.setPower(-0.35);
+                    br.setPower(-0.35);
+                    bl.setPower(-0.35);
+                    sleep(25);
+                    currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
+                }
                 yellowDropSequence();
-            }
+                wrappypoo(fl.getCurrentPosition() - 600,bl.getCurrentPosition() + 600,fr.getCurrentPosition() + 600,br.getCurrentPosition() - 600);
+                sleep(1);
+                wrappypoo(fl.getCurrentPosition() - 300,bl.getCurrentPosition() - 300,fr.getCurrentPosition() - 300,br.getCurrentPosition() - 300);            }
         }
         visionPortal.close();
     }
@@ -240,16 +294,20 @@ public class BlueFullEncoderAuto extends LinearOpMode {
         wristleft.setPosition(WRIST_DOWN);
         wristright.setPosition(1 - WRIST_DOWN);
         sleep(500);
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setTargetPosition(3000);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.setPower(0.6);
-        sleep(2000);
-        lift.setPower(0);
-        sleep(1000);
+        while (lift.isBusy()){}
+        sleep(200);
         hopper.setPosition(HOPPER_OPEN);
         sleep(1000);
         hopper.setPosition(HOPPER_CLOSED);
-        lift.setPower(-0.6);
-        sleep(2000);
-        lift.setPower(0);
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setTargetPosition(0);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift.setPower(0.6);
+        while(lift.isBusy()){}
         return "Placed Yellow!";
     }
     private void initTfod() {
