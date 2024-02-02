@@ -3,6 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
@@ -30,6 +31,13 @@ public class V3Farquaad extends LinearOpMode {
     public static final double WRIST_DOWN = 0.825;
     public static final double LAUNCHER_HOLD = 0.83;
     public static final double LAUNCHER_RELEASE = 0.68;
+    public enum CLAW_STATE {
+            DOWN_OPEN,
+            DOWN_CLOSED,
+            UP_OPEN,
+            UP_CLOSED
+
+    }
 
     public double currentDistance = 0;
 
@@ -48,6 +56,7 @@ public class V3Farquaad extends LinearOpMode {
     private DcMotor pullupleft;
     private DcMotor pullupright;
     private DistanceSensor backDistanceSensor;
+    private IMU imu;
 
 
     @Override
@@ -59,6 +68,7 @@ public class V3Farquaad extends LinearOpMode {
         lift = hardwareMap.get(DcMotor.class, "lift");
         pullupleft = hardwareMap.get(DcMotor.class, "pullupleft");
         pullupright = hardwareMap.get(DcMotor.class, "pullupright");
+        imu = hardwareMap.get(IMU.class, "imu");
 
         wristleft = hardwareMap.get(Servo.class, "wristleft");
         wristright = hardwareMap.get(Servo.class, "wristright");
@@ -89,7 +99,6 @@ public class V3Farquaad extends LinearOpMode {
         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-
         fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -102,10 +111,13 @@ public class V3Farquaad extends LinearOpMode {
 
         TeleOpMecanumDrive myDrive = new TeleOpMecanumDrive(fl, fr, bl, br);
         double yaw = 0;
+        double firstTime = 0;
+        double recentTime = 0;
         double intakeTimer = System.currentTimeMillis();
         boolean checkCase = false;
         boolean wasAPressed = false;
         boolean wasYPressed = false;
+        boolean wasXPressed = false;
         boolean wasBumperTriggered = false;
         wristleft.setPosition(WRIST_DOWN);
         wristright.setPosition(1-WRIST_DOWN);
@@ -116,7 +128,6 @@ public class V3Farquaad extends LinearOpMode {
             double currentTime = System.currentTimeMillis();
             //gunner controls
             //claw logic
-
             if (gamepad2.y && !wasYPressed){
                 wasYPressed = true;
                 if (claw.getPosition() > CLAW_OPEN_PICKUP - 0.035 && claw.getPosition() < CLAW_OPEN_DROPOFF + 0.035){
@@ -178,13 +189,17 @@ public class V3Farquaad extends LinearOpMode {
             }
 
             currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
-            if (gamepad1.x && !checkCase){
-                if (currentDistance > 4.5){
+            if (gamepad1.x && !checkCase && !wasXPressed){
+                firstTime = System.currentTimeMillis();
+                if ((firstTime - recentTime ) < 250){
+                }
+                else if (currentDistance > 5.5){
                     fl.setPower(-0.35);
                     fr.setPower(-0.35);
                     br.setPower(-0.35);
                     bl.setPower(-0.35);
                     checkCase = true;
+                    wasXPressed = true;
                     continue;
                 }
                 else {
@@ -192,19 +207,24 @@ public class V3Farquaad extends LinearOpMode {
                 }
             }
             if (checkCase){
-                if (currentDistance > 4.5){
+                recentTime = System.currentTimeMillis();
+                if (currentDistance > 5.5){
                     fl.setPower(-0.35);
                     fr.setPower(-0.35);
                     br.setPower(-0.35);
                     bl.setPower(-0.35);
+                    wasXPressed = false;
+                    if (gamepad1.x && (recentTime - firstTime) > 125){
+                        checkCase = false;
+                    }
                     continue;
                 }
                 else {
+                    wasXPressed = false;
                     checkCase = false;
                     gamepad1.rumble(20);
                 }
             }
-            double elapsedIntakeTimer = currentTime - intakeTimer;
             double x = gamepad1.left_stick_x;
             double y = -gamepad1.left_stick_y;
             yaw = gamepad1.right_stick_x;
@@ -245,7 +265,6 @@ public class V3Farquaad extends LinearOpMode {
                 pullupright.setPower(0);
                 pullupleft.setPower(0);
             }
-
         }
 
     }
