@@ -30,8 +30,8 @@ import java.util.List;
 
 
 @Config
-@Autonomous(name = "RED_FULL_AUTO", group = "Autonomous")
-public class RedFullEncoderAuto extends LinearOpMode {
+@Autonomous(name = "BLUE_FAR_SIDE_AUTO", group = "Autonomous")
+public class BlueFarSideAuto extends LinearOpMode {
 
     public static final double DRIVER_SPEED_SCALAR = 0.85;
     public static final double DRIVER_SPRINT_MODE_SCALAR = 0.95;
@@ -159,79 +159,28 @@ public class RedFullEncoderAuto extends LinearOpMode {
 
         if (opModeIsActive()){
             if (pos == 3){
-                wrappypoo(535, -506, -502, 579);
+                wrappypoo(-159, 216, 170, -178);
                 sleep(200);
-                wrappypoo(1035-70,-78-70,-28-70,1023-70);
+                wrappypoo(629+30,999+30,951+30,589+30);
+                sleep(100);
+                wrappypoo(1417, 1786, 213, -194);
+                sleep(200);
                 purpleDropSequence();
-                sleep(200);
-                wrappypoo(271,-875,750,1813);
-                sleep(200);
-                wrappypoo(-607,-1833,-119,828);
-                sleep(200);
-                wrappypoo(fl.getCurrentPosition() + (int)(535/1.6), bl.getCurrentPosition() - (int)(506/1.6), fr.getCurrentPosition() - (int)(502/1.6), br.getCurrentPosition() + (int)(579/1.6));
-                currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
-                while (currentDistance > 4.5){
-                    fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    fl.setPower(-0.35);
-                    fr.setPower(-0.35);
-                    br.setPower(-0.35);
-                    bl.setPower(-0.35);
-                    sleep(25);
-                    currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
-                }
-                yellowDropSequence();
             }
             else if (pos == 2){
-                wrappypoo(320,-276,-287,426);
+                wrappypoo(-187,223,216,-187);
                 sleep(200);
-                wrappypoo(1138-50,464-50,503-50,1147-50);
+                wrappypoo(556,935,947,512);
                 sleep(200);
                 purpleDropSequence();
-                wrappypoo(399,-326,1310,1974);
-                sleep(200);
-                wrappypoo(-729-35,-1558-35,184-35,714-35);
-                sleep(200);
-                currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
-                while (currentDistance > 4.5){
-                    fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    fl.setPower(-0.35);
-                    fr.setPower(-0.35);
-                    br.setPower(-0.35);
-                    bl.setPower(-0.35);
-                    sleep(25);
-                    currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
-                }
-                yellowDropSequence();
             }
             // handle pos = 1
             else {
-                wrappypoo(400, -364, -403, 466);
+                wrappypoo(-505, 602, 513, -525);
                 sleep(200);
-                wrappypoo(1396-90, 475-90, 560-90, 1314-90);
-                sleep(200);
-                wrappypoo(672+50,-320+50,1327+50,2117+50);
+                wrappypoo(-82, 983, 933, -135);
                 sleep(200);
                 purpleDropSequence();
-                wrappypoo(-217,-1374,338,968);
-                sleep(200);
-                wrappypoo(169,-1790,12,1696);
-                sleep(200);
-                    fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    fl.setPower(-0.35);
-                    fr.setPower(-0.35);
-                    br.setPower(-0.35);
-                    bl.setPower(-0.35);
-                    sleep(500);
-                yellowDropSequence();
             }
         }
         visionPortal.close();
@@ -250,7 +199,7 @@ public class RedFullEncoderAuto extends LinearOpMode {
         sleep(500);
         wristleft.setPosition(WRIST_UP);
         wristright.setPosition(1 - WRIST_UP);
-        sleep(200);
+        sleep(600);
         claw.setPosition(CLAW_CLOSED);
         sleep(200);
         return "Placed Purple!";
@@ -260,19 +209,17 @@ public class RedFullEncoderAuto extends LinearOpMode {
         wristleft.setPosition(WRIST_DOWN);
         wristright.setPosition(1 - WRIST_DOWN);
         sleep(500);
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.setTargetPosition(2000);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.setPower(0.6);
-        while (lift.isBusy()){}
-        sleep(200);
+        sleep(1600);
+        lift.setPower(0);
+        sleep(1000);
         hopper.setPosition(HOPPER_OPEN);
         sleep(1000);
         hopper.setPosition(HOPPER_CLOSED);
-        lift.setTargetPosition(0);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lift.setPower(0.6);
-        while(lift.isBusy()){}
+        lift.setPower(-0.6);
+        sleep(1600);
+        lift.setPower(0);
+        sleep(3000);
         wristleft.setPosition(WRIST_UP);
         wristright.setPosition(1 - WRIST_UP);
         return "Placed Yellow!";
@@ -376,13 +323,6 @@ public class RedFullEncoderAuto extends LinearOpMode {
         bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        double max = Math.max(Math.abs(flticks), Math.max(Math.abs(frticks), Math.max(Math.abs(blticks), Math.abs(brticks))));
-        double flticksscaled = flticks / max;
-        double frticksscaled = frticks / max;
-        double blticksscaled = blticks / max;
-        double brticksscaled = brticks / max;
-
 
         fl.setPower(0.4);
         bl.setPower(0.4);

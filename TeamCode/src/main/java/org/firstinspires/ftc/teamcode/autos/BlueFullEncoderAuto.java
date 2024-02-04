@@ -295,7 +295,7 @@ public class BlueFullEncoderAuto extends LinearOpMode {
         wristright.setPosition(1 - WRIST_DOWN);
         sleep(500);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.setTargetPosition(3000);
+        lift.setTargetPosition(2000);
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.setPower(0.6);
         while (lift.isBusy()){}
@@ -303,7 +303,6 @@ public class BlueFullEncoderAuto extends LinearOpMode {
         hopper.setPosition(HOPPER_OPEN);
         sleep(1000);
         hopper.setPosition(HOPPER_CLOSED);
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setTargetPosition(0);
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.setPower(0.6);

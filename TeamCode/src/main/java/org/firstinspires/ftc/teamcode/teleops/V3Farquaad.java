@@ -59,7 +59,17 @@ public class V3Farquaad extends LinearOpMode {
     private DistanceSensor backDistanceSensor;
     private IMU imu;
 
-
+    public enum SEQUENCE_STEP {
+        INIT,
+        CLOSE_CLAW,
+        FLIP_WRIST_UP,
+        CLOSE_HOPPER,
+        OPEN_CLAW_FOR_DROPOFF,
+        COMPLETE
+    }
+    private SEQUENCE_STEP currentStep = SEQUENCE_STEP.INIT;
+    private long stepStartTime = 0;
+    private boolean stateMachineActive = false;
     @Override
     public void runOpMode() {
         fl = hardwareMap.get(DcMotor.class, "leftFront");
@@ -119,14 +129,17 @@ public class V3Farquaad extends LinearOpMode {
         boolean wasAPressed = false;
         boolean wasYPressed = false;
         boolean wasXPressed = false;
+        boolean wasBPressed = false;
         boolean wasBumperTriggered = false;
         wristleft.setPosition(WRIST_DOWN);
         wristright.setPosition(1-WRIST_DOWN);
         claw.setPosition(CLAW_CLOSED);
 
+        currentStep = SEQUENCE_STEP.CLOSE_CLAW;
+        stepStartTime = System.currentTimeMillis();
+
         waitForStart();
         while (opModeIsActive()) {
-            double currentTime = System.currentTimeMillis();
             //gunner controls
             //claw logic
             if (gamepad2.y && !wasYPressed){
@@ -183,6 +196,17 @@ public class V3Farquaad extends LinearOpMode {
             else if (!gamepad2.left_bumper){
                 wasBumperTriggered = false;
             }
+
+            if (gamepad2.b && !wasBPressed) {
+                if (currentStep == SEQUENCE_STEP.INIT || currentStep == SEQUENCE_STEP.COMPLETE) {
+                    currentStep = SEQUENCE_STEP.CLOSE_CLAW;
+                    stepStartTime = System.currentTimeMillis();
+                }
+                wasBPressed = true;
+            } else if (!gamepad2.b) {
+                wasBPressed = false;
+            }
+
 
             // lift controls
             if (Math.abs(gamepad2.left_stick_y) > SENSITIVITY_THRESHOLD){
@@ -274,6 +298,36 @@ public class V3Farquaad extends LinearOpMode {
                 pullupright.setPower(0);
                 pullupleft.setPower(0);
             }
+        }
+        switch (currentStep) {
+            case CLOSE_CLAW:
+                claw.setPosition(CLAW_CLOSED);
+                if (System.currentTimeMillis() - stepStartTime > 500) {
+                    currentStep = SEQUENCE_STEP.FLIP_WRIST_UP;
+                    stepStartTime = System.currentTimeMillis();
+                }
+                break;
+            case FLIP_WRIST_UP:
+                wristleft.setPosition(WRIST_UP);
+                wristright.setPosition(1 - WRIST_UP);
+                if (System.currentTimeMillis() - stepStartTime > 500) {
+                    currentStep = SEQUENCE_STEP.CLOSE_HOPPER;
+                    stepStartTime = System.currentTimeMillis();
+                }
+                break;
+            case CLOSE_HOPPER:
+                hopper.setPosition(HOPPER_CLOSED);
+                if (System.currentTimeMillis() - stepStartTime > 500) {
+                    currentStep = SEQUENCE_STEP.OPEN_CLAW_FOR_DROPOFF;
+                    stepStartTime = System.currentTimeMillis();
+                }
+                break;
+            case OPEN_CLAW_FOR_DROPOFF:
+                claw.setPosition(CLAW_OPEN_DROPOFF);
+                currentStep = SEQUENCE_STEP.COMPLETE;
+                break;
+            case COMPLETE:
+                break;
         }
 
     }
