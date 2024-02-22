@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -70,6 +71,7 @@ public class V3Farquaad extends LinearOpMode {
     private SEQUENCE_STEP currentStep = SEQUENCE_STEP.INIT;
     private long stepStartTime = 0;
     private boolean stateMachineActive = false;
+    RevBlinkinLedDriver blinkinLedDriver;
     @Override
     public void runOpMode() {
         fl = hardwareMap.get(DcMotor.class, "leftFront");
@@ -86,6 +88,7 @@ public class V3Farquaad extends LinearOpMode {
         claw = hardwareMap.get(Servo.class, "claw");
         hopper = hardwareMap.get(Servo.class, "hopper");
         launcher = hardwareMap.get(Servo.class, "launcher");
+        blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "LED");
 
         backDistanceSensor = hardwareMap.get(DistanceSensor.class, "backdistance");
 
@@ -146,16 +149,20 @@ public class V3Farquaad extends LinearOpMode {
                 wasYPressed = true;
                 if (claw.getPosition() > CLAW_OPEN_PICKUP - 0.035 && claw.getPosition() < CLAW_OPEN_DROPOFF + 0.035){
                     claw.setPosition(CLAW_CLOSED);
+                    blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED_ORANGE);
                 }
                 else if (claw.getPosition() > CLAW_CLOSED - 0.035 && claw.getPosition() < CLAW_CLOSED + 0.035){
                     if (wristleft.getPosition() > WRIST_DOWN - 0.035 && wristleft.getPosition() < WRIST_DOWN + 0.035){
                         claw.setPosition(CLAW_OPEN_PICKUP);
+                        blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_BLUE);
                     }
                     else if (wristleft.getPosition() > WRIST_UP - 0.035 && wristleft.getPosition() < WRIST_UP + 0.035){
                         claw.setPosition(CLAW_OPEN_DROPOFF);
+                        blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_BLUE);
                     }
                     else {
                         claw.setPosition(CLAW_OPEN_DROPOFF);
+                        blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_BLUE);
                     }
                 }
             }
