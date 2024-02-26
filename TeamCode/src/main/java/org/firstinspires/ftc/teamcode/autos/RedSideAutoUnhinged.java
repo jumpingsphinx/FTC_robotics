@@ -25,7 +25,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import java.util.List;
 
 @Config
-@Autonomous(name = "UNHINGED_RED_AUTO_CYCLE", group = "Autonomous")
+@Autonomous(name = "UNHINGED_AUTO_CYCLE", group = "Autonomous")
 public class RedSideAutoUnhinged extends LinearOpMode {
     public class Lift {
         private DcMotorEx lift;
