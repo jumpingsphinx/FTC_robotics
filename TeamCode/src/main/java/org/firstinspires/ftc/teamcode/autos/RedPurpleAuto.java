@@ -185,7 +185,7 @@ public class RedPurpleAuto extends LinearOpMode {
 //                yellowDropSequence();
             }
             else if (pos == 2){
-                wrappypoo(320,-276,-287,426);
+                wrappypoo(320,-276,-287,326);
                 sleep(384);
                 wrappypoo(1138-50,464-50,503-50,1147-50);
                 sleep(2000);

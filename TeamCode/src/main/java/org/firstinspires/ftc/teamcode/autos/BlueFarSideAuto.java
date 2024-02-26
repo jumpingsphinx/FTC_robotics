@@ -158,27 +158,29 @@ public class BlueFarSideAuto extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()){
-            if (pos == 3){
-                wrappypoo(-159, 216, 170, -178);
+            if (pos == 1){
+                wrappypoo(159, -216, -170, 178);
                 sleep(200);
-                wrappypoo(629+30,999+30,951+30,589+30);
+                wrappypoo(fl.getCurrentPosition() + 629+30+159-100, bl.getCurrentPosition() + 999+30-216-100, fr.getCurrentPosition() + 951+30-170-100, br.getCurrentPosition() + 589+30+178-100);
                 sleep(100);
-                wrappypoo(1417, 1786, 213, -194);
+                wrappypoo(fl.getCurrentPosition() - (1417-629-30), bl.getCurrentPosition() - (1786-999-30), fr.getCurrentPosition() - (213-951+30), br.getCurrentPosition() - (-194-589-30));
                 sleep(200);
                 purpleDropSequence();
             }
             else if (pos == 2){
-                wrappypoo(-187,223,216,-187);
+                wrappypoo(187,-223,-216,187);
                 sleep(200);
-                wrappypoo(556,935,947,512);
+                wrappypoo(fl.getCurrentPosition() + (556 + 187+20), bl.getCurrentPosition() + (935 - 223+20), fr.getCurrentPosition() + (947 - 216+20), br.getCurrentPosition() + (512 + 187+20));
                 sleep(200);
                 purpleDropSequence();
             }
             // handle pos = 1
             else {
-                wrappypoo(-505, 602, 513, -525);
+                // already changed
+                wrappypoo(505, -602, -513, 525);
                 sleep(200);
-                wrappypoo(-82, 983, 933, -135);
+                // 525 - 135
+                wrappypoo(fl.getCurrentPosition() + 505-82-60, bl.getCurrentPosition() + 983 - 602-60, fr.getCurrentPosition() + (933 - 513-60), br.getCurrentPosition() + (525 - 135-60));
                 sleep(200);
                 purpleDropSequence();
             }
