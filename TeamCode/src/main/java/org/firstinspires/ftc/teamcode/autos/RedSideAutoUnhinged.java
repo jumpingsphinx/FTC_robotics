@@ -161,8 +161,8 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         private Servo rightwrist;
 
         public Wrist(HardwareMap hardwareMap) {
-            leftwrist = hardwareMap.get(Servo.class, "leftwrist");
-            rightwrist = hardwareMap.get(Servo.class, "rightwrist");
+            leftwrist = hardwareMap.get(Servo.class, "wristleft");
+            rightwrist = hardwareMap.get(Servo.class, "wristright");
         }
 
         public class LiftWrist implements Action {
