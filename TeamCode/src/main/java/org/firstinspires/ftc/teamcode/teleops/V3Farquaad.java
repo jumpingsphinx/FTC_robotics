@@ -7,8 +7,10 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 //import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import java.util.concurrent.TimeUnit;
+//import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp(name = "V3Farquaad", group = "TeleOp")
 public class V3Farquaad extends LinearOpMode {
@@ -68,9 +70,7 @@ public class V3Farquaad extends LinearOpMode {
         OPEN_CLAW_FOR_DROPOFF,
         COMPLETE
     }
-    private SEQUENCE_STEP currentStep = SEQUENCE_STEP.INIT;
-    private long stepStartTime = 0;
-    private boolean stateMachineActive = false;
+
     RevBlinkinLedDriver blinkinLedDriver;
     @Override
     public void runOpMode() {
@@ -125,9 +125,8 @@ public class V3Farquaad extends LinearOpMode {
 
         TeleOpMecanumDrive myDrive = new TeleOpMecanumDrive(fl, fr, bl, br);
         double yaw = 0;
-        double firstTime = 0;
-        double recentTime = 0;
-        double intakeTimer = System.currentTimeMillis();
+
+        ElapsedTime mRunTime = new ElapsedTime();
         boolean checkCase = false;
         boolean wasAPressed = false;
         boolean wasYPressed = false;
@@ -137,9 +136,6 @@ public class V3Farquaad extends LinearOpMode {
         wristleft.setPosition(WRIST_DOWN);
         wristright.setPosition(1-WRIST_DOWN);
         claw.setPosition(CLAW_CLOSED);
-
-        currentStep = SEQUENCE_STEP.CLOSE_CLAW;
-        stepStartTime = System.currentTimeMillis();
 
         waitForStart();
         while (opModeIsActive()) {
@@ -191,10 +187,14 @@ public class V3Farquaad extends LinearOpMode {
             else if (!gamepad2.a){
                 wasAPressed = false;
             }
+
+
+            // add 2 second wait and then auto-close
             if (gamepad2.left_bumper && !wasBumperTriggered){
                 wasBumperTriggered = true;
                 if (hopper.getPosition() > HOPPER_CLOSED - 0.035 && hopper.getPosition() < HOPPER_CLOSED + 0.035){
                     hopper.setPosition(HOPPER_OPEN);
+                    mRunTime.reset();
                 }
                 else if (hopper.getPosition() > HOPPER_OPEN - 0.035 && hopper.getPosition() < HOPPER_OPEN + 0.035){
                     hopper.setPosition(HOPPER_CLOSED);
@@ -202,16 +202,10 @@ public class V3Farquaad extends LinearOpMode {
             }
             else if (!gamepad2.left_bumper){
                 wasBumperTriggered = false;
-            }
-
-            if (gamepad2.b && !wasBPressed) {
-                if (currentStep == SEQUENCE_STEP.INIT || currentStep == SEQUENCE_STEP.COMPLETE) {
-                    currentStep = SEQUENCE_STEP.CLOSE_CLAW;
-                    stepStartTime = System.currentTimeMillis();
+                if (mRunTime.time(TimeUnit.MILLISECONDS) > 2000){
+                    hopper.setPosition(HOPPER_CLOSED);
+                    mRunTime.reset();
                 }
-                wasBPressed = true;
-            } else if (!gamepad2.b) {
-                wasBPressed = false;
             }
 
 
@@ -265,6 +259,8 @@ public class V3Farquaad extends LinearOpMode {
 //                    gamepad1.rumble(20);
 //                }
 //            }
+
+
             double x = gamepad1.left_stick_x;
             double y = -gamepad1.left_stick_y;
             yaw = gamepad1.right_stick_x;
@@ -305,36 +301,6 @@ public class V3Farquaad extends LinearOpMode {
                 pullupright.setPower(0);
                 pullupleft.setPower(0);
             }
-        }
-        switch (currentStep) {
-            case CLOSE_CLAW:
-                claw.setPosition(CLAW_CLOSED);
-                if (System.currentTimeMillis() - stepStartTime > 500) {
-                    currentStep = SEQUENCE_STEP.FLIP_WRIST_UP;
-                    stepStartTime = System.currentTimeMillis();
-                }
-                break;
-            case FLIP_WRIST_UP:
-                wristleft.setPosition(WRIST_UP);
-                wristright.setPosition(1 - WRIST_UP);
-                if (System.currentTimeMillis() - stepStartTime > 500) {
-                    currentStep = SEQUENCE_STEP.CLOSE_HOPPER;
-                    stepStartTime = System.currentTimeMillis();
-                }
-                break;
-            case CLOSE_HOPPER:
-                hopper.setPosition(HOPPER_CLOSED);
-                if (System.currentTimeMillis() - stepStartTime > 500) {
-                    currentStep = SEQUENCE_STEP.OPEN_CLAW_FOR_DROPOFF;
-                    stepStartTime = System.currentTimeMillis();
-                }
-                break;
-            case OPEN_CLAW_FOR_DROPOFF:
-                claw.setPosition(CLAW_OPEN_DROPOFF);
-                currentStep = SEQUENCE_STEP.COMPLETE;
-                break;
-            case COMPLETE:
-                break;
         }
 
     }
