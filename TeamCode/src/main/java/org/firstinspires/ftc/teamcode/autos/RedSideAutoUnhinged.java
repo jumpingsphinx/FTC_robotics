@@ -222,7 +222,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(11.8, 61.7, Math.toRadians(90)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(11.8, 61.7, Math.toRadians(-90)));
         Claw claw = new Claw(hardwareMap);
         Lift lift = new Lift(hardwareMap);
 
