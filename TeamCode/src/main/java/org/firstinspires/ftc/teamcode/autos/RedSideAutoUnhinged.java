@@ -225,6 +225,8 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(11.8, 61.7, Math.toRadians(-90)));
         Claw claw = new Claw(hardwareMap);
         Lift lift = new Lift(hardwareMap);
+        Hopper hopper = new Hopper(hardwareMap);
+        Wrist wrist = new Wrist(hardwareMap);
 
         Action trajectoryAction1;
         Action trajectoryAction2;
@@ -291,7 +293,8 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         Actions.runBlocking(
                 new SequentialAction(
                         trajectoryActionChosen,
-                        lift.liftUp(),
+                        wrist.lowerWrist(),
+
                         claw.openPickupClaw(),
                         lift.liftDown(),
                         trajectoryActionCloseOut

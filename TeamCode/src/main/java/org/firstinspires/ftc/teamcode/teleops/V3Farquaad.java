@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
+//import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -40,8 +40,8 @@ public class V3Farquaad extends LinearOpMode {
             UP_CLOSED
 
     }
-
-    public double currentDistance = 0;
+//
+//    public double currentDistance = 0;
 
     private Servo wristleft;
     private Servo wristright;
@@ -57,7 +57,7 @@ public class V3Farquaad extends LinearOpMode {
     private DcMotor lift;
     private DcMotor pullupleft;
     private DcMotor pullupright;
-    private DistanceSensor backDistanceSensor;
+//    private DistanceSensor backDistanceSensor;
     private IMU imu;
 
     public enum SEQUENCE_STEP {
@@ -90,7 +90,7 @@ public class V3Farquaad extends LinearOpMode {
         launcher = hardwareMap.get(Servo.class, "launcher");
         blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "LED");
 
-        backDistanceSensor = hardwareMap.get(DistanceSensor.class, "backdistance");
+//        backDistanceSensor = hardwareMap.get(DistanceSensor.class, "backdistance");
 
         //tighten the launcher
         launcher.setPosition(LAUNCHER_HOLD);
@@ -227,44 +227,44 @@ public class V3Farquaad extends LinearOpMode {
             else{
                 lift.setPower(0);
             }
-
-            currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
-            if (gamepad1.x && !checkCase && !wasXPressed){
-                firstTime = System.currentTimeMillis();
-                if ((firstTime - recentTime ) < 250){
-                }
-                else if (currentDistance > 5.5){
-                    fl.setPower(-0.35);
-                    fr.setPower(-0.35);
-                    br.setPower(-0.35);
-                    bl.setPower(-0.35);
-                    checkCase = true;
-                    wasXPressed = true;
-                    continue;
-                }
-                else {
-                    gamepad1.rumble(20);
-                }
-            }
-            if (checkCase){
-                recentTime = System.currentTimeMillis();
-                if (currentDistance > 5.5){
-                    fl.setPower(-0.35);
-                    fr.setPower(-0.35);
-                    br.setPower(-0.35);
-                    bl.setPower(-0.35);
-                    wasXPressed = false;
-                    if (gamepad1.x && (recentTime - firstTime) > 125){
-                        checkCase = false;
-                    }
-                    continue;
-                }
-                else {
-                    wasXPressed = false;
-                    checkCase = false;
-                    gamepad1.rumble(20);
-                }
-            }
+//
+//            currentDistance = backDistanceSensor.getDistance(DistanceUnit.CM);
+//            if (gamepad1.x && !checkCase && !wasXPressed){
+//                firstTime = System.currentTimeMillis();
+//                if ((firstTime - recentTime ) < 250){
+//                }
+//                else if (currentDistance > 5.5){
+//                    fl.setPower(-0.35);
+//                    fr.setPower(-0.35);
+//                    br.setPower(-0.35);
+//                    bl.setPower(-0.35);
+//                    checkCase = true;
+//                    wasXPressed = true;
+//                    continue;
+//                }
+//                else {
+//                    gamepad1.rumble(20);
+//                }
+//            }
+//            if (checkCase){
+//                recentTime = System.currentTimeMillis();
+//                if (currentDistance > 5.5){
+//                    fl.setPower(-0.35);
+//                    fr.setPower(-0.35);
+//                    br.setPower(-0.35);
+//                    bl.setPower(-0.35);
+//                    wasXPressed = false;
+//                    if (gamepad1.x && (recentTime - firstTime) > 125){
+//                        checkCase = false;
+//                    }
+//                    continue;
+//                }
+//                else {
+//                    wasXPressed = false;
+//                    checkCase = false;
+//                    gamepad1.rumble(20);
+//                }
+//            }
             double x = gamepad1.left_stick_x;
             double y = -gamepad1.left_stick_y;
             yaw = gamepad1.right_stick_x;
