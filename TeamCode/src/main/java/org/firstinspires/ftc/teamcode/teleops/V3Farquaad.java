@@ -188,7 +188,7 @@ public class V3Farquaad extends LinearOpMode {
                 wasAPressed = false;
             }
 
-
+            //HOPPER CONTROLS
             // add 2 second wait and then auto-close
             if (gamepad2.left_bumper && !wasBumperTriggered){
                 wasBumperTriggered = true;

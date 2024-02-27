@@ -228,12 +228,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         Hopper hopper = new Hopper(hardwareMap);
         Wrist wrist = new Wrist(hardwareMap);
 
-        Action trajectoryAction1;
-        Action trajectoryAction2;
-        Action trajectoryAction3;
-        Action trajectoryActionCloseOut;
-
-        trajectoryAction1 = drive.actionBuilder(drive.pose)
+        Action trajectoryAction1 = drive.actionBuilder(drive.pose)
                 .lineToYSplineHeading(33, Math.toRadians(0))
                 .waitSeconds(2)
                 .setTangent(Math.toRadians(90))
@@ -245,7 +240,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .lineToX(47.5)
                 .waitSeconds(3)
                 .build();
-        trajectoryAction2 = drive.actionBuilder(drive.pose)
+        Action trajectoryAction2 = drive.actionBuilder(drive.pose)
                 .lineToY(37)
                 .setTangent(Math.toRadians(0))
                 .lineToX(18)
@@ -254,16 +249,34 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .lineToXSplineHeading(46, Math.toRadians(180))
                 .waitSeconds(3)
                 .build();
-        trajectoryAction3 = drive.actionBuilder(drive.pose)
+        Action trajectoryAction3 = drive.actionBuilder(drive.pose)
                 .lineToYSplineHeading(33, Math.toRadians(180))
                 .waitSeconds(2)
                 .strafeTo(new Vector2d(46, 30))
                 .waitSeconds(3)
                 .build();
-        trajectoryActionCloseOut = drive.actionBuilder(drive.pose)
+        Action trajectoryActionCloseOut = drive.actionBuilder(drive.pose)
                 .strafeTo(new Vector2d(48, 12))
                 .build();
-
+        Action trajectoryActionCyclePartOne = drive.actionBuilder(drive.pose)
+                .strafeTo(new Vector2d(-53.9, 11.5))
+                .build();
+        //PICKUP
+        Action trajectoryActionAfterFirstPickup = drive.actionBuilder(drive.pose)
+                .strafeTo(new Vector2d(48, 11))
+                .strafeToConstantHeading(new Vector2d(49, 28.9))
+                .build();
+        //PLACE
+        Action trajectoryActionAfterFirstPlace = drive.actionBuilder(drive.pose)
+                .strafeTo(new Vector2d(48, 11))
+                .strafeTo(new Vector2d(-53.9, 11.5))
+                .build();
+        //PICKUP
+        Action trajectoryActionAfterSecondPickup = drive.actionBuilder(drive.pose)
+                .strafeTo(new Vector2d(48, 11))
+                .strafeToConstantHeading(new Vector2d(49, 28.9))
+                .build();
+        //PLACE
         // actions that need to happen on init; for instance, a claw tightening.
         Actions.runBlocking(claw.closeClaw());
 
@@ -294,7 +307,6 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 new SequentialAction(
                         trajectoryActionChosen,
                         wrist.lowerWrist(),
-
                         claw.openPickupClaw(),
                         lift.liftDown(),
                         trajectoryActionCloseOut
@@ -392,4 +404,5 @@ public class RedSideAutoUnhinged extends LinearOpMode {
 
         return position;
     }
+
 }
