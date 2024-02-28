@@ -60,7 +60,7 @@ public final class MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
         // drive model parameters
-        public double inPerTick = 0.00290839;
+        public double inPerTick = 0.00302027306;
         public double lateralInPerTick = -0.0019182966473509152;
         public double trackWidthTicks = 4570.206290843605;
 
@@ -227,7 +227,7 @@ public final class MecanumDrive {
     }
 
     public void setDrivePowers(PoseVelocity2d powers) {
-        double course_correct = 1.04;
+        double course_correct = 1;
         MecanumKinematics.WheelVelocities<Time> wheelVels = new MecanumKinematics(1).inverse(
                 PoseVelocity2dDual.constant(powers, 1));
 

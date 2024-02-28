@@ -27,7 +27,7 @@ public class V3Farquaad extends LinearOpMode {
     //GUNNER CONSTANTS
     public static final double HOPPER_OPEN = 0.05;
     public static final double HOPPER_CLOSED = 0.38;
-    public static final double CLAW_CLOSED = 0.67;
+    public static final double CLAW_CLOSED = 0.71;
     public static final double CLAW_OPEN_PICKUP = 0.52;
     public static final double CLAW_OPEN_DROPOFF = 0.58;
     public static final double WRIST_UP = 0.13;

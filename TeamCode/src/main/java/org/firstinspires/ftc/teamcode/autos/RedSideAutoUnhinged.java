@@ -95,7 +95,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         public class CloseClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                claw.setPosition(0.67);
+                claw.setPosition(0.71);
                 return false;
             }
         }
