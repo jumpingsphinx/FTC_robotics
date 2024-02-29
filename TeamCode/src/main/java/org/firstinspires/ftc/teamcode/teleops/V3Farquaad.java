@@ -22,7 +22,7 @@ public class V3Farquaad extends LinearOpMode {
     public static final double SENSITIVITY_THRESHOLD = 0.20;
     public static final double LIFT_SCALAR = 0.85;
     public static final double PULL_SCALAR = 0.90;
-    public static final double COURSE_CORRECT = 1.04;
+    public static final double COURSE_CORRECT = 1;
 
     //GUNNER CONSTANTS
     public static final double HOPPER_OPEN = 0.05;
