@@ -249,7 +249,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .setTangent(Math.toRadians(0))
                 .lineToX(44.5)
                 .turnTo(Math.toRadians(90))
-                .lineToY(30)
+                .lineToY(42)
                 .turnTo(Math.toRadians(180))
                 .lineToX(48.5)
                 .waitSeconds(3)
@@ -262,7 +262,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .lineToY(40)
                 .turnTo(Math.toRadians(180))
                 .setTangent(Math.toRadians(0))
-                .lineToX(48)
+                .lineToX(48.5)
                 .setTangent(Math.toRadians(90))
                 .lineToY(35)
                 .waitSeconds(3)
@@ -280,7 +280,13 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .lineToY(30)
                 .waitSeconds(3)
                 .build();
-        Action trajectoryActionCloseOut = drive.actionBuilder(new Pose2d(11.8, 61.7, Math.toRadians(-90)))
+        Action trajectoryActionCloseOut3 = drive.actionBuilder(new Pose2d(48.5, 30, Math.toRadians(180)))
+                .strafeTo(new Vector2d(48, 12))
+                .build();
+        Action trajectoryActionCloseOut1 = drive.actionBuilder(new Pose2d(48.5, 42, Math.toRadians(180)))
+                .strafeTo(new Vector2d(48, 12))
+                .build();
+        Action trajectoryActionCloseOut2 = drive.actionBuilder(new Pose2d(48.5, 35, Math.toRadians(180)))
                 .strafeTo(new Vector2d(48, 12))
                 .build();
         Action trajectoryActionCyclePartOne = drive.actionBuilder(drive.pose)
@@ -320,20 +326,22 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         if (isStopRequested()) return;
 
         Action trajectoryActionChosen;
+        Action trajectoryActionCloseOut;
         if (startPosition == 1) {
             trajectoryActionChosen = trajectoryAction1;
+            trajectoryActionCloseOut = trajectoryActionCloseOut1;
         } else if (startPosition == 2) {
             trajectoryActionChosen = trajectoryAction2;
+            trajectoryActionCloseOut = trajectoryActionCloseOut2;
         } else {
             trajectoryActionChosen = trajectoryAction3;
+            trajectoryActionCloseOut = trajectoryActionCloseOut3;
         }
+
 
         Actions.runBlocking(
                 new SequentialAction(
                         trajectoryActionChosen,
-                        wrist.lowerWrist(),
-                        claw.openPickupClaw(),
-                        lift.liftDown(),
                         trajectoryActionCloseOut
                 )
         );
