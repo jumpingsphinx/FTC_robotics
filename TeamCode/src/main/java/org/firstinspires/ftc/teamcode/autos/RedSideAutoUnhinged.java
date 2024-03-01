@@ -253,6 +253,8 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .turnTo(Math.toRadians(180))
                 .lineToX(48.5)
                 .waitSeconds(3)
+                .setTangent(0)
+                .lineToX(46)
                 .build();
         Action trajectoryAction2 = drive.actionBuilder(drive.pose)
                 .lineToY(37)
@@ -266,6 +268,8 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .setTangent(Math.toRadians(90))
                 .lineToY(35)
                 .waitSeconds(3)
+                .setTangent(0)
+                .lineToX(46)
                 .build();
         Action trajectoryAction3 = drive.actionBuilder(drive.pose)
                 .lineToY(39)
@@ -279,15 +283,26 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .setTangent(Math.toRadians(90))
                 .lineToY(30)
                 .waitSeconds(3)
+                .setTangent(0)
+                .lineToX(46)
                 .build();
-        Action trajectoryActionCloseOut3 = drive.actionBuilder(new Pose2d(48.5, 30, Math.toRadians(180)))
-                .strafeTo(new Vector2d(48, 12))
+        Action trajectoryActionCloseOut3 = drive.actionBuilder(new Pose2d(46, 30, Math.toRadians(180)))
+                .setTangent(Math.toRadians(90))
+                .lineToY(12)
+                .setTangent(0)
+                .lineToX(48)
                 .build();
-        Action trajectoryActionCloseOut1 = drive.actionBuilder(new Pose2d(48.5, 42, Math.toRadians(180)))
-                .strafeTo(new Vector2d(48, 12))
+        Action trajectoryActionCloseOut1 = drive.actionBuilder(new Pose2d(46, 42, Math.toRadians(180)))
+                .setTangent(Math.toRadians(90))
+                .lineToY(12)
+                .setTangent(0)
+                .lineToX(48)
                 .build();
-        Action trajectoryActionCloseOut2 = drive.actionBuilder(new Pose2d(48.5, 35, Math.toRadians(180)))
-                .strafeTo(new Vector2d(48, 12))
+        Action trajectoryActionCloseOut2 = drive.actionBuilder(new Pose2d(46, 35, Math.toRadians(180)))
+                .setTangent(Math.toRadians(90))
+                .lineToY(12)
+                .setTangent(0)
+                .lineToX(48)
                 .build();
         Action trajectoryActionCyclePartOne = drive.actionBuilder(drive.pose)
                 .strafeTo(new Vector2d(-53.9, 11.5))
@@ -308,6 +323,23 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .strafeToConstantHeading(new Vector2d(49, 28.9))
                 .build();
         //PLACE
+
+        Action purplePixelPlace = new SequentialAction(
+                wrist.lowerWrist(),
+                claw.openPickupClaw(),
+                wrist.safeWrist(),
+                claw.closeClaw(),
+                wrist.liftWrist()
+        );
+
+        Action pixelPlace = new SequentialAction(
+                wrist.lowerWrist(),
+                lift.liftUp(),
+                hopper.openHopper(),
+                lift.liftDown(),
+                hopper.closeHopper(),
+                wrist.liftWrist()
+        );
         // actions that need to happen on init; for instance, a claw tightening.
         Actions.runBlocking(claw.closeClaw());
 
