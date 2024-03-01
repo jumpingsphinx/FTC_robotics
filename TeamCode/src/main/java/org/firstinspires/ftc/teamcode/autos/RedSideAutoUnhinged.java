@@ -243,7 +243,8 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .lineToY(33)
                 .setTangent(0)
                 .lineToX(9)
-                .waitSeconds(2)
+                .build();
+        Action trajectoryAction1Pt2 = drive.actionBuilder(new Pose2d(9,33,Math.toRadians(0)))
                 .setTangent(Math.toRadians(90))
                 .lineToY(48)
                 .setTangent(Math.toRadians(0))
@@ -252,14 +253,13 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .lineToY(42)
                 .turnTo(Math.toRadians(180))
                 .lineToX(48.5)
-                .waitSeconds(3)
-                .setTangent(0)
-                .lineToX(46)
                 .build();
         Action trajectoryAction2 = drive.actionBuilder(drive.pose)
                 .lineToY(37)
                 .setTangent(Math.toRadians(0))
                 .lineToX(18)
+                .build();
+        Action trajectoryAction2Pt2 = drive.actionBuilder(new Pose2d(18, 37, Math.toRadians(-90)))
                 .waitSeconds(3)
                 .lineToY(40)
                 .turnTo(Math.toRadians(180))
@@ -267,9 +267,6 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .lineToX(48.5)
                 .setTangent(Math.toRadians(90))
                 .lineToY(35)
-                .waitSeconds(3)
-                .setTangent(0)
-                .lineToX(46)
                 .build();
         Action trajectoryAction3 = drive.actionBuilder(drive.pose)
                 .lineToY(39)
@@ -278,27 +275,29 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .lineToY(33)
                 .setTangent(0)
                 .lineToX(14)
+                .build();
+        Action trajectoryAction3Pt2 = drive.actionBuilder(new Pose2d(14, 33, Math.toRadians(180)))
                 .waitSeconds(2)
                 .lineToX(48.5)
                 .setTangent(Math.toRadians(90))
                 .lineToY(30)
-                .waitSeconds(3)
-                .setTangent(0)
+                .build();
+        Action trajectoryActionCloseOut3 = drive.actionBuilder(new Pose2d(48.5, 30, Math.toRadians(180)))
                 .lineToX(46)
-                .build();
-        Action trajectoryActionCloseOut3 = drive.actionBuilder(new Pose2d(46, 30, Math.toRadians(180)))
                 .setTangent(Math.toRadians(90))
                 .lineToY(12)
                 .setTangent(0)
                 .lineToX(48)
                 .build();
-        Action trajectoryActionCloseOut1 = drive.actionBuilder(new Pose2d(46, 42, Math.toRadians(180)))
+        Action trajectoryActionCloseOut1 = drive.actionBuilder(new Pose2d(48.5, 42, Math.toRadians(180)))
+                .lineToX(46)
                 .setTangent(Math.toRadians(90))
                 .lineToY(12)
                 .setTangent(0)
                 .lineToX(48)
                 .build();
-        Action trajectoryActionCloseOut2 = drive.actionBuilder(new Pose2d(46, 35, Math.toRadians(180)))
+        Action trajectoryActionCloseOut2 = drive.actionBuilder(new Pose2d(48.5, 35, Math.toRadians(180)))
+                .lineToX(46)
                 .setTangent(Math.toRadians(90))
                 .lineToY(12)
                 .setTangent(0)
@@ -358,22 +357,28 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         if (isStopRequested()) return;
 
         Action trajectoryActionChosen;
+        Action trajectoryActionChosenPt2;
         Action trajectoryActionCloseOut;
         if (startPosition == 1) {
             trajectoryActionChosen = trajectoryAction1;
+            trajectoryActionChosenPt2 = trajectoryAction1Pt2;
             trajectoryActionCloseOut = trajectoryActionCloseOut1;
         } else if (startPosition == 2) {
             trajectoryActionChosen = trajectoryAction2;
+            trajectoryActionChosenPt2 = trajectoryAction2Pt2;
             trajectoryActionCloseOut = trajectoryActionCloseOut2;
         } else {
             trajectoryActionChosen = trajectoryAction3;
+            trajectoryActionChosenPt2 = trajectoryAction3Pt2;
             trajectoryActionCloseOut = trajectoryActionCloseOut3;
         }
-
 
         Actions.runBlocking(
                 new SequentialAction(
                         trajectoryActionChosen,
+                        purplePixelPlace,
+                        trajectoryActionChosenPt2,
+                        pixelPlace,
                         trajectoryActionCloseOut
                 )
         );
