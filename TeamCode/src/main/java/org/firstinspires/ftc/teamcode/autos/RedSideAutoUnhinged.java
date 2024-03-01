@@ -96,6 +96,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 claw.setPosition(0.71);
+                sleep(200);
                 return false;
             }
         }
@@ -107,6 +108,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 claw.setPosition(0.52);
+                sleep(200);
                 return false;
             }
         }
@@ -117,6 +119,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 claw.setPosition(0.58);
+                sleep(200);
                 return false;
             }
         }
@@ -137,6 +140,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 hopper.setPosition(0.38);
+                sleep(200);
                 return false;
             }
         }
@@ -148,6 +152,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 hopper.setPosition(0.05);
+                sleep(200);
                 return false;
             }
         }
@@ -170,6 +175,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
             public boolean run(@NonNull TelemetryPacket packet) {
                 leftwrist.setPosition(0.13);
                 rightwrist.setPosition(1 - 0.13);
+                sleep(200);
                 return false;
             }
         }
@@ -182,6 +188,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
             public boolean run(@NonNull TelemetryPacket packet) {
                 leftwrist.setPosition(0.825);
                 rightwrist.setPosition(1 - 0.825);
+                sleep(200);
                 return false;
             }
         }
@@ -193,6 +200,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
             public boolean run(@NonNull TelemetryPacket packet) {
                 leftwrist.setPosition(0.6);
                 rightwrist.setPosition(1 - 0.6);
+                sleep(200);
                 return false;
             }
         }
@@ -229,15 +237,21 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         Wrist wrist = new Wrist(hardwareMap);
 
         Action trajectoryAction1 = drive.actionBuilder(drive.pose)
-                .lineToYSplineHeading(33, Math.toRadians(0))
+                .lineToY(39)
+                .turnTo(Math.toRadians(0))
+                .setTangent(Math.toRadians(90))
+                .lineToY(33)
+                .setTangent(0)
+                .lineToX(9)
                 .waitSeconds(2)
                 .setTangent(Math.toRadians(90))
                 .lineToY(48)
                 .setTangent(Math.toRadians(0))
-                .lineToX(32)
-                .strafeTo(new Vector2d(44.5, 30))
-                .turn(Math.toRadians(180))
-                .lineToX(47.5)
+                .lineToX(44.5)
+                .turnTo(Math.toRadians(90))
+                .lineToY(30)
+                .turnTo(Math.toRadians(180))
+                .lineToX(48.5)
                 .waitSeconds(3)
                 .build();
         Action trajectoryAction2 = drive.actionBuilder(drive.pose)
@@ -254,12 +268,19 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .waitSeconds(3)
                 .build();
         Action trajectoryAction3 = drive.actionBuilder(drive.pose)
-                .lineToYSplineHeading(33, Math.toRadians(180))
+                .lineToY(39)
+                .turnTo(Math.toRadians(180))
+                .setTangent(Math.toRadians(90))
+                .lineToY(33)
+                .setTangent(0)
+                .lineToX(14)
                 .waitSeconds(2)
-                .strafeTo(new Vector2d(46, 30))
+                .lineToX(48.5)
+                .setTangent(Math.toRadians(90))
+                .lineToY(30)
                 .waitSeconds(3)
                 .build();
-        Action trajectoryActionCloseOut = drive.actionBuilder(drive.pose)
+        Action trajectoryActionCloseOut = drive.actionBuilder(new Pose2d(11.8, 61.7, Math.toRadians(-90)))
                 .strafeTo(new Vector2d(48, 12))
                 .build();
         Action trajectoryActionCyclePartOne = drive.actionBuilder(drive.pose)
