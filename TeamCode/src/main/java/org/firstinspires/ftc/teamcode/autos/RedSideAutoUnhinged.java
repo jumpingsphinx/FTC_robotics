@@ -245,8 +245,12 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 .setTangent(Math.toRadians(0))
                 .lineToX(18)
                 .waitSeconds(3)
+                .lineToY(40)
+                .turnTo(Math.toRadians(180))
                 .setTangent(Math.toRadians(0))
-                .lineToXSplineHeading(46, Math.toRadians(180))
+                .lineToX(48)
+                .setTangent(Math.toRadians(90))
+                .lineToY(35)
                 .waitSeconds(3)
                 .build();
         Action trajectoryAction3 = drive.actionBuilder(drive.pose)

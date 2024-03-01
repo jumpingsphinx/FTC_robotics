@@ -14,27 +14,33 @@ public class MyClass {
                 .build();
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(11.8, 61.7, Math.toRadians(-90)))
-                .lineToYSplineHeading(33, Math.toRadians(180))
-                .waitSeconds(1.5)
-                .strafeTo(new Vector2d(46, 30))
-                .waitSeconds(2)
-                .strafeTo(new Vector2d(48, 11))
-                //UNIVERSAL
-                .strafeTo(new Vector2d(-53.9, 11.5))
-                //PICKUP
-                .waitSeconds(2)
-                .strafeTo(new Vector2d(48, 11))
-                .strafeToConstantHeading(new Vector2d(49, 28.9))
-                //PLACE
-                .waitSeconds(2)
-                .strafeTo(new Vector2d(48, 11))
-                .strafeTo(new Vector2d(-53.9, 11.5))
-                //PICKUP
-                .waitSeconds(2)
-                .strafeTo(new Vector2d(48, 11))
-                .strafeToConstantHeading(new Vector2d(49, 28.9))
-                //PLACE
-                .waitSeconds(2)
+                .lineToY(37)
+                .setTangent(Math.toRadians(0))
+                .lineToX(18)
+                .waitSeconds(3)
+                .lineToY(40)
+                .turnTo(Math.toRadians(180))
+                .setTangent(Math.toRadians(0))
+                .lineToX(48)
+                .setTangent(Math.toRadians(90))
+                .lineToY(35)
+                .waitSeconds(3)
+//                //UNIVERSAL
+//                .strafeTo(new Vector2d(-53.9, 11.5))
+//                //PICKUP
+//                .waitSeconds(2)
+//                .strafeTo(new Vector2d(48, 11))
+//                .strafeToConstantHeading(new Vector2d(49, 28.9))
+//                //PLACE
+//                .waitSeconds(2)
+//                .strafeTo(new Vector2d(48, 11))
+//                .strafeTo(new Vector2d(-53.9, 11.5))
+//                //PICKUP
+//                .waitSeconds(2)
+//                .strafeTo(new Vector2d(48, 11))
+//                .strafeToConstantHeading(new Vector2d(49, 28.9))
+//                //PLACE
+//                .waitSeconds(2)
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
