@@ -180,8 +180,8 @@ public class V3Farquaad extends LinearOpMode {
                     wristright.setPosition(1 - WRIST_DOWN);
                 }
                 else if (wristleft.getPosition() > WRIST_SAFE - 0.035 && wristleft.getPosition() < WRIST_SAFE + 0.035) {
-                    wristleft.setPosition(WRIST_DOWN);
-                    wristright.setPosition(1 - WRIST_DOWN);
+                    wristleft.setPosition(WRIST_UP);
+                    wristright.setPosition(1 - WRIST_UP);
                 }
             }
             else if (!gamepad2.a){
