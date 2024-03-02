@@ -17,7 +17,7 @@ public class MyClass {
                 .lineToY(37.5)
                 .turnTo(Math.toRadians(177))
                 .setTangent(Math.toRadians(90))
-                .lineToY(33)
+                .lineToY(36.5)
                 .setTangent(0)
                 .lineToX(14)
 //                //UNIVERSAL

@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -31,6 +32,7 @@ import java.util.List;
 
 @Config
 @Autonomous(name = "BLUE_FULL_AUTO", group = "Autonomous")
+@Disabled
 public class BlueFullEncoderAuto extends LinearOpMode {
 
     public static final double DRIVER_SPEED_SCALAR = 0.85;

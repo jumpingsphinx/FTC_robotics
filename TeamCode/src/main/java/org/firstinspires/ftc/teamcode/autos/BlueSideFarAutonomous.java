@@ -316,7 +316,7 @@ public class BlueSideFarAutonomous extends LinearOpMode {
                 .setTangent(Math.toRadians(90))
                 .lineToY(33)
                 .setTangent(0)
-                .lineToX(12)
+                .lineToX(10)
                 .build();
         Action trajectoryAction1Pt2 = drive.actionBuilder(new Pose2d(12,33,Math.toRadians(0)))
                 .setTangent(Math.toRadians(90))
@@ -331,7 +331,7 @@ public class BlueSideFarAutonomous extends LinearOpMode {
         Action trajectoryAction2 = drive.actionBuilder(drive.pose)
                 .lineToY(38)
                 .setTangent(Math.toRadians(0))
-                .lineToX(15)
+                .lineToX(14)
                 .build();
         Action trajectoryAction2Pt2 = drive.actionBuilder(new Pose2d(18, 37, Math.toRadians(-90)))
                 .lineToY(40)

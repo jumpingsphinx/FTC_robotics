@@ -15,11 +15,13 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import java.util.List;
 
 
 @Config
 @Autonomous(name = "BLUE_PURPLE_AUTO", group = "Autonomous")
+@Disabled
 public class BlueEncoderAuto extends LinearOpMode {
 
     public static final double DRIVER_SPEED_SCALAR = 0.85;

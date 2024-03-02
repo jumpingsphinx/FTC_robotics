@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 
 @Config
 @Autonomous(name = "BLUE_FULL_APRILTAG_AUTO", group = "Autonomous")
+@Disabled
 public class BlueFullEncoderApriltagAuto extends LinearOpMode {
 
     public static final double DRIVER_SPEED_SCALAR = 0.85;

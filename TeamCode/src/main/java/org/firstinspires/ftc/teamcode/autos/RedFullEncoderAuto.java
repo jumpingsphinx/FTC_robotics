@@ -23,7 +23,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.List;
@@ -31,6 +31,7 @@ import java.util.List;
 
 @Config
 @Autonomous(name = "RED_FULL_AUTO", group = "Autonomous")
+@Disabled
 public class RedFullEncoderAuto extends LinearOpMode {
 
     public static final double DRIVER_SPEED_SCALAR = 0.85;

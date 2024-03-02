@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.concurrent.TimeUnit;
 //import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "V3.75 Farquaytheon", group = "TeleOp")
+@TeleOp(name = "V3.75 Farquatheon", group = "TeleOp")
 public class V3Farquaad extends LinearOpMode {
     // DRIVE CONSTANTS
     public static final double DRIVER_SPEED_SCALAR = 0.85;
@@ -32,7 +32,7 @@ public class V3Farquaad extends LinearOpMode {
     public static final double CLAW_OPEN_DROPOFF = 0.60;
     public static final double WRIST_UP = 0.13;
     public static final double WRIST_SAFE = 0.6;
-    public static final double WRIST_DOWN = 0.825;
+    public static final double WRIST_DOWN = 0.815;
     public static final double LAUNCHER_HOLD = 0.83;
     public static final double LAUNCHER_RELEASE = 0.68;
     public enum CLAW_STATE {
