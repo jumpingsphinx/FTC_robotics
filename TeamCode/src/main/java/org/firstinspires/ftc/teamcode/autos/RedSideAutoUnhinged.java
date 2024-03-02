@@ -168,7 +168,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         public class CloseClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                claw.setPosition(0.71);
+                claw.setPosition(0.75);
                 sleep(350);
                 return false;
             }
@@ -180,7 +180,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         public class OpenPickupClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                claw.setPosition(0.52);
+                claw.setPosition(0.56);
                 sleep(350);
                 return false;
             }
@@ -191,7 +191,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         public class OpenDropOffClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                claw.setPosition(0.58);
+                claw.setPosition(0.60);
                 sleep(450);
                 return false;
             }
@@ -259,8 +259,8 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         public class LowerWrist implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                leftwrist.setPosition(0.825);
-                rightwrist.setPosition(1 - 0.825);
+                leftwrist.setPosition(0.815);
+                rightwrist.setPosition(1 - 0.815);
                 sleep(1200);
                 return false;
             }

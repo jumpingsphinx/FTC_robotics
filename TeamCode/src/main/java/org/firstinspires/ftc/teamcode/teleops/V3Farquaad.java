@@ -133,8 +133,8 @@ public class V3Farquaad extends LinearOpMode {
         boolean wasXPressed = false;
         boolean wasBPressed = false;
         boolean wasBumperTriggered = false;
-        wristleft.setPosition(WRIST_DOWN);
-        wristright.setPosition(1-WRIST_DOWN);
+        wristleft.setPosition(WRIST_UP);
+        wristright.setPosition(1-WRIST_UP);
         claw.setPosition(CLAW_CLOSED);
 
         waitForStart();
