@@ -25,15 +25,12 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Config
-@Autonomous(name = "BLUE_NEAR_FULL_RR", group = "Autonomous")
-public class RedSideAutoUnhinged extends LinearOpMode {
-    private static ElapsedTime myStopwatch = new ElapsedTime();
+@Autonomous(name = "RED_NEAR_FULL_RR", group = "Autonomous")
+public class BlueSideAutoUnhinged extends LinearOpMode {
     public class Lift {
         private DcMotorEx lift;
 
@@ -49,13 +46,13 @@ public class RedSideAutoUnhinged extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    lift.setPower(0.6);
+                    lift.setPower(0.8);
                     initialized = true;
                 }
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 1700.0) {
+                if (pos < 2000.0) {
                     return true;
                 } else {
                     lift.setPower(0);
@@ -66,29 +63,6 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         public Action liftUp() {
             return new LiftUp();
         }
-        public class LiftUpAgain implements Action {
-            private boolean initialized = false;
-
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                if (!initialized) {
-                    lift.setPower(0.6);
-                    initialized = true;
-                }
-
-                double pos = lift.getCurrentPosition();
-                packet.put("liftPos", pos);
-                if (pos < 2600.0) {
-                    return true;
-                } else {
-                    lift.setPower(0);
-                    return false;
-                }
-            }
-        }
-        public Action liftUpAgain() {
-            return new LiftUpAgain();
-        }
 
         public class LiftDown implements Action {
             private boolean initialized = false;
@@ -96,8 +70,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    sleep(200);
-                    lift.setPower(-0.4);
+                    lift.setPower(-0.8);
                     initialized = true;
                 }
 
@@ -107,7 +80,6 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                     return true;
                 } else {
                     lift.setPower(0);
-                    sleep(400);
                     return false;
                 }
             }
@@ -116,47 +88,6 @@ public class RedSideAutoUnhinged extends LinearOpMode {
             return new LiftDown();
         }
     }
-    //pullup declarations
-    public class PullUp {
-        private DcMotorEx pullupright;
-        private DcMotorEx pullupleft;
-
-        public PullUp(HardwareMap hardwareMap) {
-            pullupleft = hardwareMap.get(DcMotorEx.class, "pullupleft");
-            pullupleft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            pullupleft.setDirection(DcMotor.Direction.FORWARD);
-            pullupright = hardwareMap.get(DcMotorEx.class, "pullupright");
-            pullupright.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            pullupright.setDirection(DcMotor.Direction.REVERSE);
-        }
-
-        public class PullUpDown implements Action {
-            private boolean initialized = false;
-
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                if (!initialized) {
-                    pullupleft.setPower(0.6);
-                    pullupright.setPower(0.6);
-                    myStopwatch.reset();
-                    initialized = true;
-                }
-
-                packet.put("pullup Status: ", "inited");
-                if (myStopwatch.time(TimeUnit.MILLISECONDS) < 300.0) {
-                    return true;
-                } else {
-                    pullupright.setPower(0);
-                    pullupleft.setPower(0);
-                    return false;
-                }
-            }
-        }
-        public Action pullUpDown() {
-            return new PullUpDown();
-        }
-    }
-
     // Claw Declarations
     public class Claw {
         private Servo claw;
@@ -303,78 +234,76 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(11.8, 61.7, Math.toRadians(-90)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(11.8, -61.7, Math.toRadians(90)));
         Claw claw = new Claw(hardwareMap);
         Lift lift = new Lift(hardwareMap);
         Hopper hopper = new Hopper(hardwareMap);
         Wrist wrist = new Wrist(hardwareMap);
-        PullUp pullUp = new PullUp(hardwareMap);
 
         Action trajectoryAction1 = drive.actionBuilder(drive.pose)
-                .lineToY(37)
-                .turnTo(Math.toRadians(3))
+                .lineToY(-39)
+                .turnTo(Math.toRadians(180))
                 .setTangent(Math.toRadians(90))
-                .lineToY(33)
+                .lineToY(-33)
                 .setTangent(0)
-                .lineToX(12)
+                .lineToX(9)
                 .build();
-        Action trajectoryAction1Pt2 = drive.actionBuilder(new Pose2d(12,33,Math.toRadians(0)))
+        Action trajectoryAction1Pt2 = drive.actionBuilder(new Pose2d(9,-33,Math.toRadians(180)))
                 .setTangent(Math.toRadians(90))
-                .lineToY(51)
+                .lineToY(-48)
                 .setTangent(Math.toRadians(0))
                 .lineToX(44.5)
-                .setTangent(Math.toRadians(90))
-                .lineToY(45)
-                .turnTo(Math.toRadians(182))
+                .turnTo(Math.toRadians(-90))
+                .lineToY(-42)
+                .turnTo(Math.toRadians(0))
                 .lineToX(50)
                 .build();
         Action trajectoryAction2 = drive.actionBuilder(drive.pose)
-                .lineToY(38)
+                .lineToY(-38)
                 .setTangent(Math.toRadians(0))
                 .lineToX(15)
                 .build();
-        Action trajectoryAction2Pt2 = drive.actionBuilder(new Pose2d(18, 37, Math.toRadians(-90)))
-                .lineToY(40)
-                .turnTo(Math.toRadians(175))
+        Action trajectoryAction2Pt2 = drive.actionBuilder(new Pose2d(18, -37, Math.toRadians(90)))
+                .lineToY(-40)
+                .turnTo(Math.toRadians(-5))
                 .setTangent(Math.toRadians(0))
                 .lineToX(45)
                 .setTangent(Math.toRadians(90))
-                .lineToY(34)
+                .lineToY(-34)
                 .setTangent(Math.toRadians(0))
                 .lineToX(49.5)
                 .build();
         Action trajectoryAction3 = drive.actionBuilder(drive.pose)
-                .lineToY(37.5)
-                .turnTo(Math.toRadians(177))
+                .lineToY(-37.5)
+                .turnTo(Math.toRadians(-3))
                 .setTangent(Math.toRadians(90))
-                .lineToY(36.5)
+                .lineToY(-33)
                 .setTangent(0)
                 .lineToX(14)
                 .build();
-        Action trajectoryAction3Pt2 = drive.actionBuilder(new Pose2d(14, 36.5, Math.toRadians(180)))
-                .waitSeconds(2)
-                .lineToX(51)
-                .setTangent(Math.toRadians(90))
-                .lineToY(27)
+        Action trajectoryAction3Pt2 = drive.actionBuilder(new Pose2d(14, -33, Math.toRadians(0)))
+                .lineToX(50)
+                .setTangent(Math.toRadians(-90))
+                .lineToY(-30)
                 .build();
-        Action trajectoryActionCloseOut3 = drive.actionBuilder(new Pose2d(51, 27, Math.toRadians(180)))
+        Action trajectoryActionCloseOut3 = drive.actionBuilder(new Pose2d(48, -30, Math.toRadians(0)))
                 .lineToX(46)
-                .setTangent(Math.toRadians(90))
-                .lineToY(12)
+                .setTangent(Math.toRadians(-90))
+                .lineToY(-12)
                 .setTangent(0)
                 .lineToX(48)
                 .build();
-        Action trajectoryActionCloseOut1 = drive.actionBuilder(new Pose2d(49.5, 42, Math.toRadians(180)))
-                .lineToX(42)
-                .setTangent(Math.toRadians(90))
-                .lineToY(12)
+        Action trajectoryActionCloseOut1 = drive.actionBuilder(new Pose2d(48, -42, Math.toRadians(0)))
+                .lineToX(46)
+                .setTangent(Math.toRadians(-90))
+                .lineToY(-12)
                 .setTangent(0)
                 .lineToX(48)
                 .build();
-        Action trajectoryActionCloseOut2 = drive.actionBuilder(new Pose2d(50, 35, Math.toRadians(180)))
+        Action trajectoryActionCloseOut2 = drive.actionBuilder(new Pose2d(48, -35, Math.toRadians(0)))
                 .lineToX(46)
-                .setTangent(Math.toRadians(90))
-                .lineToY(12)
+                .setTangent(Math.toRadians(-90))
+                .lineToY(-12)
                 .setTangent(0)
                 .lineToX(48)
                 .build();
@@ -410,7 +339,6 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 wrist.lowerWrist(),
                 lift.liftUp(),
                 hopper.openHopper(),
-                lift.liftUpAgain(),
                 lift.liftDown(),
                 hopper.closeHopper(),
                 wrist.liftWrist()
@@ -455,8 +383,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                         purplePixelPlace,
                         trajectoryActionChosenPt2,
                         pixelPlace,
-                        trajectoryActionCloseOut,
-                        pullUp.pullUpDown()
+                        trajectoryActionCloseOut
                 )
         );
         visionPortal.close();

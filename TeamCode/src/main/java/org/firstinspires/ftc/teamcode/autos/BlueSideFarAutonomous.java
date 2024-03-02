@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Config
-@Autonomous(name = "BLUE_NEAR_FULL_RR", group = "Autonomous")
-public class RedSideAutoUnhinged extends LinearOpMode {
+@Autonomous(name = "BLUE_FAR_RR", group = "Autonomous")
+public class BlueSideFarAutonomous extends LinearOpMode {
     private static ElapsedTime myStopwatch = new ElapsedTime();
     public class Lift {
         private DcMotorEx lift;
@@ -453,9 +453,9 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 new SequentialAction(
                         trajectoryActionChosen,
                         purplePixelPlace,
-                        trajectoryActionChosenPt2,
-                        pixelPlace,
-                        trajectoryActionCloseOut,
+                        //trajectoryActionChosenPt2,
+                        //pixelPlace,
+                        //trajectoryActionCloseOut,
                         pullUp.pullUpDown()
                 )
         );

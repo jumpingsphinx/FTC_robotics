@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.concurrent.TimeUnit;
 //import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "V3Farquaad", group = "TeleOp")
+@TeleOp(name = "V3.75 Farquaytheon", group = "TeleOp")
 public class V3Farquaad extends LinearOpMode {
     // DRIVE CONSTANTS
     public static final double DRIVER_SPEED_SCALAR = 0.85;
@@ -27,9 +27,9 @@ public class V3Farquaad extends LinearOpMode {
     //GUNNER CONSTANTS
     public static final double HOPPER_OPEN = 0.05;
     public static final double HOPPER_CLOSED = 0.38;
-    public static final double CLAW_CLOSED = 0.71;
-    public static final double CLAW_OPEN_PICKUP = 0.52;
-    public static final double CLAW_OPEN_DROPOFF = 0.58;
+    public static final double CLAW_CLOSED = 0.75;
+    public static final double CLAW_OPEN_PICKUP = 0.56;
+    public static final double CLAW_OPEN_DROPOFF = 0.60;
     public static final double WRIST_UP = 0.13;
     public static final double WRIST_SAFE = 0.6;
     public static final double WRIST_DOWN = 0.825;
@@ -194,6 +194,9 @@ public class V3Farquaad extends LinearOpMode {
                 wasBumperTriggered = true;
                 if (hopper.getPosition() > HOPPER_CLOSED - 0.035 && hopper.getPosition() < HOPPER_CLOSED + 0.035){
                     hopper.setPosition(HOPPER_OPEN);
+                    lift.setPower(0.6);
+                    sleep(1200);
+                    lift.setPower(0);
                     mRunTime.reset();
                 }
                 else if (hopper.getPosition() > HOPPER_OPEN - 0.035 && hopper.getPosition() < HOPPER_OPEN + 0.035){
@@ -202,7 +205,7 @@ public class V3Farquaad extends LinearOpMode {
             }
             else if (!gamepad2.left_bumper){
                 wasBumperTriggered = false;
-                if (mRunTime.time(TimeUnit.MILLISECONDS) > 2000){
+                if (mRunTime.time(TimeUnit.MILLISECONDS) > 3000){
                     hopper.setPosition(HOPPER_CLOSED);
                     mRunTime.reset();
                 }
