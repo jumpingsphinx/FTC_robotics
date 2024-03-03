@@ -14,16 +14,25 @@ public class MyClass {
                 .build();
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(14, -61.7, Math.toRadians(90)))
-                .lineToY(-46.5)
-                .setTangent(0)
-                .lineToX(23)
-                //STOP
-                .waitSeconds(3)
-                .turnTo(Math.toRadians(177))
+                .lineToY(-37)
+                .turnTo(Math.toRadians(183))
                 .setTangent(Math.toRadians(90))
-                .lineToY(-44)
+                .lineToY(-33)
                 .setTangent(0)
-                .lineToX(51)
+                .lineToX(14)
+                //STOP
+                .setTangent(Math.toRadians(0))
+                .lineToX(44.5)
+                .setTangent(Math.toRadians(90))
+                .lineToY(-27)
+                .setTangent(0)
+                .lineToX(50)
+                //CLOSE
+                .lineToX(45)
+                .setTangent(Math.toRadians(90))
+                .lineToY(-12)
+                .setTangent(0)
+                .lineToX(54)
 //                //UNIVERSAL
 //                .strafeTo(new Vector2d(-53.9, 11.5))
 //                //PICKUP

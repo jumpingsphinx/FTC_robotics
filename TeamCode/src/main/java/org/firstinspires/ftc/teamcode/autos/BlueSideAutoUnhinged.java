@@ -353,26 +353,26 @@ public class BlueSideAutoUnhinged extends LinearOpMode {
                 .setTangent(0)
                 .lineToX(51)
                 .build();
-        Action trajectoryActionCloseOut3 = drive.actionBuilder(new Pose2d(51, -27, Math.toRadians(0)))
-                .lineToX(46)
+        Action trajectoryActionCloseOut3 = drive.actionBuilder(new Pose2d(51, -44, Math.toRadians(180)))
+                .lineToX(45)
                 .setTangent(Math.toRadians(90))
                 .lineToY(-12)
                 .setTangent(0)
-                .lineToX(48)
+                .lineToX(54)
                 .build();
-        Action trajectoryActionCloseOut1 = drive.actionBuilder(new Pose2d(49.5, -42, Math.toRadians(0)))
-                .lineToX(42)
+        Action trajectoryActionCloseOut1 = drive.actionBuilder(new Pose2d(50, -27, Math.toRadians(180)))
+                .lineToX(45)
                 .setTangent(Math.toRadians(90))
                 .lineToY(-12)
                 .setTangent(0)
-                .lineToX(48)
+                .lineToX(54)
                 .build();
-        Action trajectoryActionCloseOut2 = drive.actionBuilder(new Pose2d(50, -35, Math.toRadians(0)))
-                .lineToX(46)
+        Action trajectoryActionCloseOut2 = drive.actionBuilder(new Pose2d(49.5, -31.5, Math.toRadians(180)))
+                .lineToX(45)
                 .setTangent(Math.toRadians(90))
                 .lineToY(-12)
                 .setTangent(0)
-                .lineToX(48)
+                .lineToX(54)
                 .build();
         Action trajectoryActionCyclePartOne = drive.actionBuilder(drive.pose)
                 .strafeTo(new Vector2d(-53.9, 11.5))
@@ -451,7 +451,7 @@ public class BlueSideAutoUnhinged extends LinearOpMode {
                         purplePixelPlace,
                         trajectoryActionChosenPt2,
                         pixelPlace,
-                        //trajectoryActionCloseOut,
+                        trajectoryActionCloseOut,
                         pullUp.pullUpDown()
                 )
         );
