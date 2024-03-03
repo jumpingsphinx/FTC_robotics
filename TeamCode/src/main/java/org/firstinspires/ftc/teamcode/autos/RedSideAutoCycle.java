@@ -27,8 +27,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Config
-@Autonomous(name = "RED_NEAR_FULL_RR", group = "Autonomous")
-public class RedSideAutoUnhinged extends LinearOpMode {
+@Autonomous(name = "RED_CYCLE", group = "Autonomous")
+public class RedSideAutoCycle extends LinearOpMode {
+    // this auton is intended as experimental and a (hopefully) fun surprise for the team
     private static ElapsedTime myStopwatch = new ElapsedTime();
     public class Lift {
         private DcMotorEx lift;
@@ -276,6 +277,19 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         public Action safeWrist() {
             return new SafeWrist();
         }
+
+        public class CycleWrist implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                leftwrist.setPosition(0.72);
+                rightwrist.setPosition(1 - 0.72);
+                sleep(1200);
+                return false;
+            }
+        }
+        public Action cycleWrist() {
+            return new CycleWrist();
+        }
     }
 
     // begin camera stuff
@@ -352,43 +366,35 @@ public class RedSideAutoUnhinged extends LinearOpMode {
         Action trajectoryActionCloseOut3 = drive.actionBuilder(new Pose2d(51, -44, Math.toRadians(180)))
                 .lineToX(45)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-12)
+                .lineToY(-11)
                 .setTangent(0)
                 .lineToX(54)
                 .build();
         Action trajectoryActionCloseOut1 = drive.actionBuilder(new Pose2d(50, -27, Math.toRadians(180)))
                 .lineToX(45)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-12)
+                .lineToY(-11)
                 .setTangent(0)
                 .lineToX(54)
                 .build();
         Action trajectoryActionCloseOut2 = drive.actionBuilder(new Pose2d(49.5, -31.5, Math.toRadians(180)))
                 .lineToX(45)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-12)
+                .lineToY(-11)
                 .setTangent(0)
                 .lineToX(54)
                 .build();
-        Action trajectoryActionCyclePartOne = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(-53.9, 11.5))
+        Action trajectoryActionCyclePartOne = drive.actionBuilder(new Pose2d(54, -11, Math.toRadians(180)))
+                .lineToX(-56)
                 .build();
         //PICKUP
-        Action trajectoryActionAfterFirstPickup = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(48, 11))
-                .strafeToConstantHeading(new Vector2d(49, 28.9))
+        Action trajectoryActionAfterFirstPickup = drive.actionBuilder((new Pose2d(-56, -11, Math.toRadians(180))))
+                .lineToX(45)
+                .setTangent(Math.toRadians(90))
+                .lineToY(-33)
+                .setTangent(Math.toRadians(0))
+                .lineToX(50)
                 .build();
-        //PLACE
-        Action trajectoryActionAfterFirstPlace = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(48, 11))
-                .strafeTo(new Vector2d(-53.9, 11.5))
-                .build();
-        //PICKUP
-        Action trajectoryActionAfterSecondPickup = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(48, 11))
-                .strafeToConstantHeading(new Vector2d(49, 28.9))
-                .build();
-        //PLACE
 
         Action purplePixelPlace = new SequentialAction(
                 wrist.lowerWrist(),
@@ -407,6 +413,16 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                 hopper.closeHopper(),
                 wrist.liftWrist()
         );
+
+        Action cyclePickup = new SequentialAction(
+                claw.openPickupClaw(),
+                wrist.cycleWrist(),
+                claw.closeClaw(),
+                hopper.closeHopper(),
+                wrist.liftWrist(),
+                claw.openDropOffClaw()
+        );
+
         // actions that need to happen on init; for instance, a claw tightening.
         Actions.runBlocking(claw.closeClaw());
 
@@ -448,7 +464,11 @@ public class RedSideAutoUnhinged extends LinearOpMode {
                         trajectoryActionChosenPt2,
                         pixelPlace,
                         trajectoryActionCloseOut,
-                        pullUp.pullUpDown()
+                        pullUp.pullUpDown(),
+                        trajectoryActionCyclePartOne,
+                        cyclePickup,
+                        trajectoryActionAfterFirstPickup,
+                        pixelPlace
                 )
         );
         visionPortal.close();

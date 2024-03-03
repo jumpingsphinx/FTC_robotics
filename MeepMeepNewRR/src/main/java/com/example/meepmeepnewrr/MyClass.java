@@ -13,26 +13,12 @@ public class MyClass {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(14, -61.7, Math.toRadians(90)))
-                .lineToY(-37)
-                .turnTo(Math.toRadians(183))
-                .setTangent(Math.toRadians(90))
-                .lineToY(-33)
-                .setTangent(0)
-                .lineToX(14)
-                //STOP
-                .setTangent(Math.toRadians(0))
-                .lineToX(44.5)
-                .setTangent(Math.toRadians(90))
-                .lineToY(-27)
-                .setTangent(0)
-                .lineToX(50)
-                //CLOSE
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-56, -11, Math.toRadians(180)))
                 .lineToX(45)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-12)
-                .setTangent(0)
-                .lineToX(54)
+                .lineToY(-33)
+                .setTangent(Math.toRadians(0))
+                .lineToX(50)
 //                //UNIVERSAL
 //                .strafeTo(new Vector2d(-53.9, 11.5))
 //                //PICKUP

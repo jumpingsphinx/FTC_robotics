@@ -2,13 +2,9 @@ package org.firstinspires.ftc.teamcode.autos;
 import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.AccelConstraint;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -31,7 +27,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Config
-@Autonomous(name = "RED_NEAR_FULL_RR", group = "Autonomous")
+@Autonomous(name = "BLUE_NEAR_FULL_RR", group = "Autonomous")
 public class BlueSideAutoUnhinged extends LinearOpMode {
     private static ElapsedTime myStopwatch = new ElapsedTime();
     public class Lift {
@@ -55,7 +51,7 @@ public class BlueSideAutoUnhinged extends LinearOpMode {
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 600.0) {
+                if (pos < 1000.0) {
                     return true;
                 } else {
                     lift.setPower(0);
@@ -78,7 +74,7 @@ public class BlueSideAutoUnhinged extends LinearOpMode {
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 1200.0) {
+                if (pos < 1600.0) {
                     return true;
                 } else {
                     lift.setPower(0);
@@ -303,7 +299,7 @@ public class BlueSideAutoUnhinged extends LinearOpMode {
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(11.8, -61.7, Math.toRadians(90)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(11.8, 61.7, Math.toRadians(-90)));
         Claw claw = new Claw(hardwareMap);
         Lift lift = new Lift(hardwareMap);
         Hopper hopper = new Hopper(hardwareMap);
@@ -311,68 +307,72 @@ public class BlueSideAutoUnhinged extends LinearOpMode {
         PullUp pullUp = new PullUp(hardwareMap);
 
         Action trajectoryAction1 = drive.actionBuilder(drive.pose)
-                .lineToY(-37)
-                .turnTo(Math.toRadians(183))
+                .lineToY(37)
+                .turnTo(Math.toRadians(3))
                 .setTangent(Math.toRadians(90))
-                .lineToY(-33)
+                .lineToY(33)
                 .setTangent(0)
-                .lineToX(14)
+                .lineToX(12)
                 .build();
-        Action trajectoryAction1Pt2 = drive.actionBuilder(new Pose2d(14,-33,Math.toRadians(180)))
+        Action trajectoryAction1Pt2 = drive.actionBuilder(new Pose2d(12,33,Math.toRadians(0)))
+                .setTangent(Math.toRadians(90))
+                .lineToY(51)
                 .setTangent(Math.toRadians(0))
                 .lineToX(44.5)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-27)
-                .setTangent(0)
+                .lineToY(45)
+                .turnTo(Math.toRadians(182))
                 .lineToX(50)
                 .build();
         Action trajectoryAction2 = drive.actionBuilder(drive.pose)
-                .lineToY(-38)
+                .lineToY(38)
                 .setTangent(Math.toRadians(0))
-                .lineToX(16)
+                .lineToX(15)
                 .build();
-        Action trajectoryAction2Pt2 = drive.actionBuilder(new Pose2d(18, -37, Math.toRadians(90)))
-                .lineToY(-40)
-                .turnTo(Math.toRadians(183))
+        Action trajectoryAction2Pt2 = drive.actionBuilder(new Pose2d(18, 37, Math.toRadians(-90)))
+                .lineToY(40)
+                .turnTo(Math.toRadians(175))
                 .setTangent(Math.toRadians(0))
                 .lineToX(45)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-31.5)
+                .lineToY(34)
                 .setTangent(Math.toRadians(0))
                 .lineToX(49.5)
                 .build();
         Action trajectoryAction3 = drive.actionBuilder(drive.pose)
-                .lineToY(-46.5)
-                .setTangent(0)
-                .lineToX(23)
-                .build();
-        Action trajectoryAction3Pt2 = drive.actionBuilder(new Pose2d(14, -36.5, Math.toRadians(0)))
+                .lineToY(37.5)
                 .turnTo(Math.toRadians(177))
                 .setTangent(Math.toRadians(90))
-                .lineToY(-44)
+                .lineToY(36.5)
                 .setTangent(0)
+                .lineToX(14)
+                .build();
+        Action trajectoryAction3Pt2 = drive.actionBuilder(new Pose2d(14, 36.5, Math.toRadians(180)))
+                .waitSeconds(2)
                 .lineToX(51)
-                .build();
-        Action trajectoryActionCloseOut3 = drive.actionBuilder(new Pose2d(51, -44, Math.toRadians(180)))
-                .lineToX(45)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-12)
-                .setTangent(0)
-                .lineToX(54)
+                .lineToY(27)
                 .build();
-        Action trajectoryActionCloseOut1 = drive.actionBuilder(new Pose2d(50, -27, Math.toRadians(180)))
-                .lineToX(45)
+        Action trajectoryActionCloseOut3 = drive.actionBuilder(new Pose2d(51, 27, Math.toRadians(180)))
+                .lineToX(46)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-12)
+                .lineToY(12)
                 .setTangent(0)
-                .lineToX(54)
+                .lineToX(48)
                 .build();
-        Action trajectoryActionCloseOut2 = drive.actionBuilder(new Pose2d(49.5, -31.5, Math.toRadians(180)))
-                .lineToX(45)
+        Action trajectoryActionCloseOut1 = drive.actionBuilder(new Pose2d(49.5, 42, Math.toRadians(180)))
+                .lineToX(42)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-12)
+                .lineToY(12)
                 .setTangent(0)
-                .lineToX(54)
+                .lineToX(48)
+                .build();
+        Action trajectoryActionCloseOut2 = drive.actionBuilder(new Pose2d(50, 35, Math.toRadians(180)))
+                .lineToX(46)
+                .setTangent(Math.toRadians(90))
+                .lineToY(12)
+                .setTangent(0)
+                .lineToX(48)
                 .build();
         Action trajectoryActionCyclePartOne = drive.actionBuilder(drive.pose)
                 .strafeTo(new Vector2d(-53.9, 11.5))
