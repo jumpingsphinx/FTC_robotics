@@ -55,7 +55,7 @@ public class BlueSideFarAutonomous extends LinearOpMode {
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 1700.0) {
+                if (pos < 1000.0) {
                     return true;
                 } else {
                     lift.setPower(0);
@@ -78,7 +78,7 @@ public class BlueSideFarAutonomous extends LinearOpMode {
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 2600.0) {
+                if (pos < 1600.0) {
                     return true;
                 } else {
                     lift.setPower(0);
@@ -136,8 +136,8 @@ public class BlueSideFarAutonomous extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    pullupleft.setPower(0.6);
-                    pullupright.setPower(0.6);
+                    pullupleft.setPower(-0.6);
+                    pullupright.setPower(-0.6);
                     myStopwatch.reset();
                     initialized = true;
                 }
@@ -316,7 +316,7 @@ public class BlueSideFarAutonomous extends LinearOpMode {
                 .setTangent(Math.toRadians(90))
                 .lineToY(33)
                 .setTangent(0)
-                .lineToX(10)
+                .lineToX(12)
                 .build();
         Action trajectoryAction1Pt2 = drive.actionBuilder(new Pose2d(12,33,Math.toRadians(0)))
                 .setTangent(Math.toRadians(90))
@@ -331,7 +331,7 @@ public class BlueSideFarAutonomous extends LinearOpMode {
         Action trajectoryAction2 = drive.actionBuilder(drive.pose)
                 .lineToY(38)
                 .setTangent(Math.toRadians(0))
-                .lineToX(14)
+                .lineToX(15)
                 .build();
         Action trajectoryAction2Pt2 = drive.actionBuilder(new Pose2d(18, 37, Math.toRadians(-90)))
                 .lineToY(40)

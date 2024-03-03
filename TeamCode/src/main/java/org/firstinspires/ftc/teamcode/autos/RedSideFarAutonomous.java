@@ -55,7 +55,7 @@ public class RedSideFarAutonomous extends LinearOpMode {
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 1700.0) {
+                if (pos < 600.0) {
                     return true;
                 } else {
                     lift.setPower(0);
@@ -78,7 +78,7 @@ public class RedSideFarAutonomous extends LinearOpMode {
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 2600.0) {
+                if (pos < 1200.0) {
                     return true;
                 } else {
                     lift.setPower(0);
@@ -136,8 +136,8 @@ public class RedSideFarAutonomous extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    pullupleft.setPower(0.6);
-                    pullupright.setPower(0.6);
+                    pullupleft.setPower(-0.6);
+                    pullupright.setPower(-0.6);
                     myStopwatch.reset();
                     initialized = true;
                 }
@@ -316,45 +316,42 @@ public class RedSideFarAutonomous extends LinearOpMode {
                 .setTangent(Math.toRadians(90))
                 .lineToY(-33)
                 .setTangent(0)
-                .lineToX(12)
+                .lineToX(14)
                 .build();
-        Action trajectoryAction1Pt2 = drive.actionBuilder(new Pose2d(12,-33,Math.toRadians(180)))
-                .setTangent(Math.toRadians(90))
-                .lineToY(-51)
+        Action trajectoryAction1Pt2 = drive.actionBuilder(new Pose2d(14,-33,Math.toRadians(180)))
                 .setTangent(Math.toRadians(0))
                 .lineToX(44.5)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-45)
-                .turnTo(Math.toRadians(2))
+                .lineToY(-27)
+                .setTangent(0)
                 .lineToX(50)
                 .build();
         Action trajectoryAction2 = drive.actionBuilder(drive.pose)
                 .lineToY(-38)
                 .setTangent(Math.toRadians(0))
-                .lineToX(15)
+                .lineToX(16)
                 .build();
         Action trajectoryAction2Pt2 = drive.actionBuilder(new Pose2d(18, -37, Math.toRadians(90)))
                 .lineToY(-40)
-                .turnTo(Math.toRadians(-5))
+                .turnTo(Math.toRadians(183))
                 .setTangent(Math.toRadians(0))
                 .lineToX(45)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-34)
+                .lineToY(-31.5)
                 .setTangent(Math.toRadians(0))
                 .lineToX(49.5)
                 .build();
         Action trajectoryAction3 = drive.actionBuilder(drive.pose)
-                .lineToY(-37.5)
-                .turnTo(Math.toRadians(-3))
-                .setTangent(Math.toRadians(90))
-                .lineToY(-36.5)
+                .lineToY(-46.5)
                 .setTangent(0)
-                .lineToX(14)
+                .lineToX(23)
                 .build();
         Action trajectoryAction3Pt2 = drive.actionBuilder(new Pose2d(14, -36.5, Math.toRadians(0)))
-                .lineToX(51)
+                .turnTo(Math.toRadians(177))
                 .setTangent(Math.toRadians(90))
-                .lineToY(-27)
+                .lineToY(-44)
+                .setTangent(0)
+                .lineToX(51)
                 .build();
         Action trajectoryActionCloseOut3 = drive.actionBuilder(new Pose2d(51, -27, Math.toRadians(0)))
                 .lineToX(46)
