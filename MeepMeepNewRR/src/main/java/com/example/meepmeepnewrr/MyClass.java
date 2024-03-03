@@ -1,4 +1,5 @@
 package com.example.meepmeepnewrr;
+import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
@@ -13,28 +14,13 @@ public class MyClass {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-56, -11, Math.toRadians(180)))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(48,11,Math.toRadians(180)))
+                .lineToX(-56)
                 .lineToX(45)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-33)
+                .lineToY(33)
                 .setTangent(Math.toRadians(0))
                 .lineToX(50)
-//                //UNIVERSAL
-//                .strafeTo(new Vector2d(-53.9, 11.5))
-//                //PICKUP
-//                .waitSeconds(2)
-//                .strafeTo(new Vector2d(48, 11))
-//                .strafeToConstantHeading(new Vector2d(49, 28.9))
-//                //PLACE
-//                .waitSeconds(2)
-//                .strafeTo(new Vector2d(48, 11))
-//                .strafeTo(new Vector2d(-53.9, 11.5))
-//                //PICKUP
-//                .waitSeconds(2)
-//                .strafeTo(new Vector2d(48, 11))
-//                .strafeToConstantHeading(new Vector2d(49, 28.9))
-//                //PLACE
-//                .waitSeconds(2)
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)

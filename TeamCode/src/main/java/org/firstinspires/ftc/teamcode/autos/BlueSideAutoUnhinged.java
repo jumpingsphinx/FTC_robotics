@@ -51,7 +51,7 @@ public class BlueSideAutoUnhinged extends LinearOpMode {
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 1000.0) {
+                if (pos < 600.0) {
                     return true;
                 } else {
                     lift.setPower(0);
@@ -74,7 +74,7 @@ public class BlueSideAutoUnhinged extends LinearOpMode {
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 1600.0) {
+                if (pos < 1400.0) {
                     return true;
                 } else {
                     lift.setPower(0);
