@@ -55,7 +55,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 1700.0) {
+                if (pos < 1000.0) {
                     return true;
                 } else {
                     lift.setPower(0);
@@ -78,7 +78,7 @@ public class RedSideAutoUnhinged extends LinearOpMode {
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 2600.0) {
+                if (pos < 1600.0) {
                     return true;
                 } else {
                     lift.setPower(0);
@@ -136,8 +136,8 @@ public class RedSideAutoUnhinged extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    pullupleft.setPower(0.6);
-                    pullupright.setPower(0.6);
+                    pullupleft.setPower(-0.6);
+                    pullupright.setPower(-0.6);
                     myStopwatch.reset();
                     initialized = true;
                 }
