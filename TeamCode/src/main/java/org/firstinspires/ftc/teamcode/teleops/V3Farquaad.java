@@ -32,7 +32,7 @@ public class V3Farquaad extends LinearOpMode {
     public static final double CLAW_OPEN_DROPOFF = 0.60;
     public static final double WRIST_UP = 0.13;
     public static final double WRIST_SAFE = 0.6;
-    public static final double WRIST_DOWN = 0.815;
+    public static final double WRIST_DOWN = 0.83;
     public static final double LAUNCHER_HOLD = 0.83;
     public static final double LAUNCHER_RELEASE = 0.68;
     public enum CLAW_STATE {
