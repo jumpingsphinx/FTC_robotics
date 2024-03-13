@@ -436,7 +436,7 @@ public class RedSideAutoCycle extends LinearOpMode {
         int startPosition = pos;
         telemetry.addData("Starting Position", startPosition);
         telemetry.update();
-        int startPosition = 1;
+        startPosition = 1;
         waitForStart();
 
         if (isStopRequested()) return;
