@@ -384,6 +384,7 @@ public class RedSideAutoCycle extends LinearOpMode {
                 .build();
         Action trajectoryActionCyclePartOne = drive.actionBuilder(new Pose2d(45, -11, Math.toRadians(180)))
                 .lineToX(-56)
+                .lineToY(-12.5)
                 .build();
         //PICKUP
         Action trajectoryActionAfterFirstPickup = drive.actionBuilder((new Pose2d(-56, -11, Math.toRadians(180))))
