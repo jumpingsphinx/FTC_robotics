@@ -52,7 +52,7 @@ public class RedSideAutoCycle extends LinearOpMode {
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 1200.0) {
+                if (pos < 1500.0) {
                     return true;
                 } else {
                     lift.setPower(0);
@@ -75,7 +75,7 @@ public class RedSideAutoCycle extends LinearOpMode {
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 1800.0) {
+                if (pos < 2100.0) {
                     return true;
                 } else {
                     lift.setPower(0);
