@@ -374,8 +374,6 @@ public class RedSideAutoCycle extends LinearOpMode {
                 .lineToX(45)
                 .setTangent(Math.toRadians(90))
                 .lineToY(-11)
-                .setTangent(0)
-                .lineToX(54)
                 .build();
         Action trajectoryActionCloseOut2 = drive.actionBuilder(new Pose2d(49.5, -31.5, Math.toRadians(180)))
                 .lineToX(45)
@@ -384,7 +382,7 @@ public class RedSideAutoCycle extends LinearOpMode {
                 .setTangent(0)
                 .lineToX(54)
                 .build();
-        Action trajectoryActionCyclePartOne = drive.actionBuilder(new Pose2d(54, -11, Math.toRadians(180)))
+        Action trajectoryActionCyclePartOne = drive.actionBuilder(new Pose2d(45, -11, Math.toRadians(180)))
                 .lineToX(-56)
                 .build();
         //PICKUP
