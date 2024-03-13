@@ -281,8 +281,8 @@ public class RedSideAutoCycle extends LinearOpMode {
         public class CycleWrist implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                leftwrist.setPosition(0.72);
-                rightwrist.setPosition(1 - 0.72);
+                leftwrist.setPosition(0.75);
+                rightwrist.setPosition(1 - 0.75);
                 sleep(1200);
                 return false;
             }
