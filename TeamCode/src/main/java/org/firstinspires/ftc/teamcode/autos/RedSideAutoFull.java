@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Config
-@Autonomous(name = "RED_CYCLE", group = "Autonomous")
-public class RedSideAutoCycle extends LinearOpMode {
+@Autonomous(name = "RUNTHISRED", group = "Autonomous")
+public class RedSideAutoFull extends LinearOpMode {
     // this auton is intended as experimental and a (hopefully) fun surprise for the team
     private static ElapsedTime myStopwatch = new ElapsedTime();
     public class Lift {
@@ -330,9 +330,9 @@ public class RedSideAutoCycle extends LinearOpMode {
                 .build();
         Action trajectoryAction1Pt2 = drive.actionBuilder(new Pose2d(14,-33,Math.toRadians(180)))
                 .setTangent(Math.toRadians(0))
-                .lineToX(44.5)
+                .lineToX(43.5)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-27)
+                .lineToY(-20)
                 .setTangent(0)
                 .lineToX(50)
                 .build();
@@ -382,19 +382,19 @@ public class RedSideAutoCycle extends LinearOpMode {
                 .setTangent(0)
                 .lineToX(54)
                 .build();
-        Action trajectoryActionCyclePartOne = drive.actionBuilder(new Pose2d(45, -11, Math.toRadians(180)))
-                .lineToX(-59)
-                .setTangent(Math.toRadians(90))
-                .lineToY(-19.5)
-                .build();
-        //PICKUP
-        Action trajectoryActionAfterFirstPickup = drive.actionBuilder((new Pose2d(-59, -11, Math.toRadians(180))))
-                .lineToX(45)
-                .setTangent(Math.toRadians(90))
-                .lineToY(-33)
-                .setTangent(Math.toRadians(0))
-                .lineToX(50)
-                .build();
+//        Action trajectoryActionCyclePartOne = drive.actionBuilder(new Pose2d(45, -11, Math.toRadians(180)))
+//                .lineToX(-59)
+//                .setTangent(Math.toRadians(90))
+//                .lineToY(-19.5)
+//                .build();
+//        //PICKUP
+//        Action trajectoryActionAfterFirstPickup = drive.actionBuilder((new Pose2d(-59, -11, Math.toRadians(180))))
+//                .lineToX(45)
+//                .setTangent(Math.toRadians(90))
+//                .lineToY(-33)
+//                .setTangent(Math.toRadians(0))
+//                .lineToX(50)
+//                .build();
 
         Action purplePixelPlace = new SequentialAction(
                 wrist.lowerWrist(),
@@ -465,11 +465,11 @@ public class RedSideAutoCycle extends LinearOpMode {
                         trajectoryActionChosenPt2,
                         pixelPlace,
                         trajectoryActionCloseOut,
-                        pullUp.pullUpDown(),
-                        trajectoryActionCyclePartOne,
-                        cyclePickup,
-                        trajectoryActionAfterFirstPickup,
-                        pixelPlace
+                        pullUp.pullUpDown()
+//                        trajectoryActionCyclePartOne,
+//                        cyclePickup,
+//                        trajectoryActionAfterFirstPickup,
+//                        pixelPlace
                 )
         );
         visionPortal.close();
@@ -566,3 +566,4 @@ public class RedSideAutoCycle extends LinearOpMode {
     }
 
 }
+

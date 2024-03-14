@@ -40,7 +40,7 @@ public class BlueTimeAuto extends LinearOpMode {
     public static final double CLAW_OPEN_DROPOFF = 0.60;
     public static final double WRIST_UP = 0.13;
     public static final double WRIST_DOWN = 0.825;
-    public static final double LAUNCHER_HOLD = 0.83;
+    public static final double LAUNCHER_HOLD = 0.85;
     public static final double LAUNCHER_RELEASE = 0.68;
 
     private Servo wristleft;
